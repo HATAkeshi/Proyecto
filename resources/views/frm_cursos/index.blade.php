@@ -8,6 +8,8 @@
 
 @section('content')
 <p>Welcome to this beautiful admin panel.</p>
+<h3>Cursos en General</h3>
+<a class="btn btn-warning" href="{{ route('frm_cursos.create') }}">Nuevo</a>
 
 @stop
 
@@ -17,6 +19,6 @@
 
 @section('js')
 <script>
-  console.log('Hola');
+    console.log('Hola');
 </script>
 @stop

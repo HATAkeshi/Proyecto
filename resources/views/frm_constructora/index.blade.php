@@ -8,6 +8,9 @@
 
 @section('content')
 <p>Welcome to this beautiful admin panel.</p>
+Constructora ludeño
+
+<a class="btn btn-warning" href="{{ route('frm_alquiler_andamios.create') }}">Nuevo</a>
 
 @stop
 
@@ -17,6 +20,6 @@
 
 @section('js')
 <script>
-  console.log('Hola');
+    console.log('Hola');
 </script>
 @stop
