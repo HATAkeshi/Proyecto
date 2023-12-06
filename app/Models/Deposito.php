@@ -13,6 +13,6 @@ class Deposito extends Model
     // Definición de la relación con Curso
     public function cursos()
     {
-        return $this->belongsTo(Curso::class, 'curso_id');
+        return $this->belongsTo(Curso::class);
     }
 }

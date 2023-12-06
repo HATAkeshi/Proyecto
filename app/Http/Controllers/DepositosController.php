@@ -11,13 +11,13 @@ class DepositosController extends Controller
     //opciones de permisos 
     function __construct()
     {
-        $this->middleware('permission:ver-depositos|crear-depositos|editar-depositos|borrar-depositos', ['only'=>['index']]);
+        $this->middleware('permission:ver-depositos|crear-depositos|editar-depositos|borrar-depositos', ['only' => ['index']]);
 
-        $this->middleware('permission:crear-depositos', ['only'=>['create','store']]);
+        $this->middleware('permission:crear-depositos', ['only' => ['create', 'store']]);
         //editar
-        $this->middleware('permission:editar-depositos', ['only'=>['edit','update']]);
+        $this->middleware('permission:editar-depositos', ['only' => ['edit', 'update']]);
         //borrar
-        $this->middleware('permission:borrar-depositos', ['only'=>['destroy']]);
+        $this->middleware('permission:borrar-depositos', ['only' => ['destroy']]);
     }
     /**
      * Display a listing of the resource.
@@ -25,7 +25,7 @@ class DepositosController extends Controller
     public function index()
     {
         $depositos = Deposito::paginate(5);
-        return view('frm_depositos.index', compact('depositos'));
+        return view('depositos.index', compact('depositos'));
     }
 
     /**
@@ -33,7 +33,7 @@ class DepositosController extends Controller
      */
     public function create()
     {
-        return view('frm_depositos.crear');
+        return view('depositos.crear');
     }
 
     /**
@@ -47,7 +47,7 @@ class DepositosController extends Controller
             'Monto' => 'required|numeric|regex:/^\d+(\.\d{1,2})?$/'
         ]);
         Deposito::create($request->all());
-        return redirect()->route('frm_depositos.index');
+        return redirect()->route('depositos.index');
     }
 
     /**
@@ -63,7 +63,7 @@ class DepositosController extends Controller
      */
     public function edit(Deposito $deposito)
     {
-        return view('frm_depositos.editar', compact('deposito'));
+        return view('depositos.editar', compact('deposito'));
     }
 
     /**
@@ -77,7 +77,7 @@ class DepositosController extends Controller
             'Monto' => 'required|numeric|regex:/^\d+(\.\d{1,2})?$/'
         ]);
         $deposito->update($request->all());
-        return redirect()->route('frm_depositos.index');
+        return redirect()->route('depositos.index');
     }
 
     /**
@@ -86,6 +86,6 @@ class DepositosController extends Controller
     public function destroy(Deposito $deposito)
     {
         $deposito->delete();
-        return redirect()->route('frm_depositos.index');
+        return redirect()->route('depositos.index');
     }
 }

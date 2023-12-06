@@ -306,11 +306,6 @@ return [
             'type' => 'sidebar-menu-search',
             'text' => 'search',
         ],
-        [
-            'text' => 'blog',
-            'url'  => 'admin/blog',
-            'can'  => 'manage-blog',
-        ],
         ['header' => 'CONFIGURACIONES'],
         [
             'text' => 'Usuarios',
@@ -336,7 +331,7 @@ return [
             'submenu' => [
                 [
                     'text' => 'Cursos',
-                    'url' => '/frm_cursos',
+                    'url' => '/cursos',
                     'class' => 'form-submenu',
                     'icon_color' => 'warning',
                 ],
@@ -347,12 +342,12 @@ return [
                     'submenu' => [
                         [
                             'text' => 'Constructura Ludeño',
-                            'url'  => '/frm_constructora',
+                            'url'  => 'constructoras',
                             'icon' => 'fas fa-solid fa-share fa-flip-vertical'
                         ],
                         [
                             'text' => 'Alquiler de Andamios',
-                            'url'  => '/frm_alquiler',
+                            'url'  => '/alquileres',
                             'icon' => 'fas fa-solid fa-share fa-flip-vertical'
                         ],
                     ],
@@ -368,7 +363,7 @@ return [
                 [
                     'text'       => 'Gasto Extraordinario',
                     'icon_color' => 'warning',
-                    'url'        => '/frm_gasto_extraordinario',
+                    'url'        => 'gastos',
                     'class' => 'form-submenu',
                 ],
             ],
@@ -406,22 +401,6 @@ return [
                     'icon_color' => 'warning'
                 ],
             ]
-        ],
-        ['header' => 'labels'],
-        [
-            'text'       => 'important',
-            'icon_color' => 'red',
-            'url'        => '#',
-        ],
-        [
-            'text'       => 'warning',
-            'icon_color' => 'yellow',
-            'url'        => '#',
-        ],
-        [
-            'text'       => 'information',
-            'icon_color' => 'cyan',
-            'url'        => '#',
         ],
     ],
 

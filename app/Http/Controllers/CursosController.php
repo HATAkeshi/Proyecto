@@ -25,7 +25,7 @@ class CursosController extends Controller
     public function index()
     {
         $cursos = Curso::paginate(5);
-        return view('frm_cursos.index', compact('cursos'));
+        return view('cursos.index', compact('cursos'));
     }
 
     /**
@@ -33,7 +33,7 @@ class CursosController extends Controller
      */
     public function create()
     {
-        return view('frm_cursos.crear');
+        return view('cursos.crear');
     }
 
     /**
@@ -42,14 +42,15 @@ class CursosController extends Controller
     public function store(Request $request)
     {
         request()->validate([
-            'Nombre_de_persona_anticipo_y_porcentaje_de_anticipo' => 'required',
-            'Nombre_de_persona_pago total' => 'required',
-            'Detalle_de_curso' => 'required',
+            'Nombre_de_persona' => 'required',
+            'Porcentaje_de_anticipo' => 'required',
+            'Nombre_de_persona_pago_total' => 'required',
+            'Detalle_de_curso' => 'required|in:carpinteria,sketchup,manejo_redes',
             'Numero_de_comprobante' => 'required|integer',
             'Ingresos' => 'required|numeric|regex:/^\d+(\.\d{1,2})?$/'
         ]);
         Curso::create($request->all());
-        return redirect()->route('frm_cursos.index');
+        return redirect()->route('cursos.index');
     }
 
     /**
@@ -65,7 +66,7 @@ class CursosController extends Controller
      */
     public function edit(Curso $curso)
     {
-        return view('frm_cursos.editar', compact('curso'));
+        return view('cursos.editar', compact('curso'));
     }
 
     /**
@@ -74,14 +75,15 @@ class CursosController extends Controller
     public function update(Request $request, Curso $curso)
     {
         request()->validate([
-            'Nombre_de_persona_anticipo_y_porcentaje_de_anticipo' => 'required',
-            'Nombre_de_persona_pago total' => 'required',
-            'Detalle_de_curso' => 'required',
+            'Nombre_de_persona' => 'required',
+            'Porcentaje_de_anticipo' => 'required',
+            'Nombre_de_persona_pago_total' => 'required',
+            'Detalle_de_curso' => 'required|in:carpinteria,sketchup,manejo_redes',
             'Numero_de_comprobante' => 'required|integer',
             'Ingresos' => 'required|numeric|regex:/^\d+(\.\d{1,2})?$/'
         ]);
         $curso->update($request->all());
-        return redirect()->route('frm_cursos.index');
+        return redirect()->route('cursos.index');
     }
 
     /**
@@ -90,6 +92,6 @@ class CursosController extends Controller
     public function destroy(Curso $curso)
     {
         $curso->delete();
-        return redirect()->route('frm_cursos.index');
+        return redirect()->route('cursos.index');
     }
 }

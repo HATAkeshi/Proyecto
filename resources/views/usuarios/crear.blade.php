@@ -64,7 +64,7 @@
                     <button type="submit" class="btn btn-primary">Guardar</button>
                 </div>
             </form>
-            
+
         </div>
         <div class="col col-md-6 bg d-none d-sm-block"></div>
     </section>

@@ -11,8 +11,11 @@
 @stop
 
 @section('content')
-<!-- crear -->
-<a class="btn btn-warning" href="{{ route('usuarios.create') }}">Nuevo</a>
+
+@can('crear-usuarios')
+    <!-- crear -->
+    <a class="btn btn-warning" href="{{ route('usuarios.create') }}">Nuevo</a>
+@endcan
 <table class="table table-striped table-hover table-bordered mt-2">
     <thead class="table-dark">
         <th style="display: none">ID</th>
@@ -36,10 +39,14 @@
                 @endif
             </td>
             <td>
+                @can('crear-usuarios')
                 <a class="btn btn-info" href="{{ route('usuarios.edit', $usuario->id) }}">Editar</a>
+                @endcan
+                @can('borar-usuarios')
                 {!! Form::open(['method'=> 'DELETE', 'route'=> ['usuarios.destroy', $usuario->id], 'style'=>'display:inline']) !!}
                     {!! Form::submit('Borrar', ['class'=> 'btn btn-danger']) !!}
                 {!! Form::close() !!}
+                @endcan
             </td>
         </tr>
         @endforeach
