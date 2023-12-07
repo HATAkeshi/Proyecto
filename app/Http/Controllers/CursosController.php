@@ -42,10 +42,10 @@ class CursosController extends Controller
     public function store(Request $request)
     {
         request()->validate([
-            'Nombre_de_persona' => 'required',
-            'Porcentaje_de_anticipo' => 'required',
-            'Nombre_de_persona_pago_total' => 'required',
-            'Detalle_de_curso' => 'required|in:carpinteria,sketchup,manejo_redes',
+            'Nombre_de_persona' => 'required|regex:/^[a-zA-Z\s]+$/u',
+            'Porcentaje_de_anticipo' => 'required|numeric',
+            'Nombre_de_persona_pago_total' => 'required|regex:/^[a-zA-Z\s]+$/u',
+            'Detalle_de_curso' => 'required|in:Carpiteria en Aluminio,Scketch Up - V-Ray,Manejo de Redes',
             'Numero_de_comprobante' => 'required|integer',
             'Ingresos' => 'required|numeric|regex:/^\d+(\.\d{1,2})?$/'
         ]);
@@ -75,10 +75,10 @@ class CursosController extends Controller
     public function update(Request $request, Curso $curso)
     {
         request()->validate([
-            'Nombre_de_persona' => 'required',
-            'Porcentaje_de_anticipo' => 'required',
-            'Nombre_de_persona_pago_total' => 'required',
-            'Detalle_de_curso' => 'required|in:carpinteria,sketchup,manejo_redes',
+            'Nombre_de_persona' => 'required|regex:/^[a-zA-Z\s]+$/u',
+            'Porcentaje_de_anticipo' => 'required|integer',
+            'Nombre_de_persona_pago_total' => 'required|regex:/^[a-zA-Z\s]+$/u',
+            'Detalle_de_curso' => 'required|in:Carpiteria en Aluminio,Scketch Up - V-Ray,Manejo de Redes',
             'Numero_de_comprobante' => 'required|integer',
             'Ingresos' => 'required|numeric|regex:/^\d+(\.\d{1,2})?$/'
         ]);

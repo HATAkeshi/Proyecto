@@ -43,7 +43,7 @@
                     </div>
                 </div>
                 <div class="mb-3">
-                    <div class="form-floating">
+                    <div class="form-group">
                         <label class="form-label" for="Nombre_a_quien_se_entrego_el_dinero">Nombre a quien se entrego el dinero</label>
                         <input type="text" name="Nombre_a_quien_se_entrego_el_dinero" class="form-control" placeholder="Ejemplo: Jose" required>
                     </div>
@@ -81,7 +81,7 @@
                 <div class="mb-3">
                     <div class="form-group">
                         <label class="form-label" for="Monto">Monto</label>
-                        <input type="number" name="Monto" min="0" max="100000" step="0.01" pattern="\d+(\.\d{2})?" placeholder="Bs." required>
+                        <input class="form-control" type="number" name="Monto" min="0" max="100000" step="0.01" pattern="\d+(\.\d{2})?" placeholder="Bs." required>
                     </div>
                     <div class="valid-feedback">
                         Todo bien c:!
@@ -103,20 +103,21 @@
 @stop
 
 @section('css')
-<link rel="stylesheet" href="{{ 'css/bootstrap.min.css' }}">
+<link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
 <!-- Dentro de tu archivo Blade -->
 <style>
     .bg {
-        background-image: url('{{ asset("imagenesApoyo/crear-gastos.png") }}');
+        background-image: url('{{ asset("imagenesApoyo/crear-gasto.png") }}');
         background-position: center center;
         background-repeat: no-repeat;
-        background-size: 60%;
+        background-size: 50%;
     }
 </style>
 
 @stop
 
 @section('js')
+<script src="{{ asset('js/bootstrap.bundle.min.js') }}"></script>
 <script>
     console.log('Hola');
 </script>

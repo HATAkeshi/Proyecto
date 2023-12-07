@@ -42,9 +42,9 @@ class GastosController extends Controller
     public function store(Request $request)
     {
         request()->validate([
-            'Motivo_resumido_de_salida_de_dinero' => 'required',
-            'Nombre_a_quien_se_entrego_el_dinero' => 'required',
-            'Quien_aprobo_la_entrega_de_dinero' => 'required',
+            'Motivo_resumido_de_salida_de_dinero' => 'required|regex:/^[a-zA-Z\s,.()]+$/u',
+            'Nombre_a_quien_se_entrego_el_dinero' => 'required|regex:/^[a-zA-Z\s]+$/u',
+            'Quien_aprobo_la_entrega_de_dinero' => 'required|regex:/^[a-zA-Z\s]+$/u',
             'Nro_de_comprobante' => 'required|integer',
             'Monto' => 'required|numeric|regex:/^\d+(\.\d{1,2})?$/'
         ]);
@@ -74,9 +74,9 @@ class GastosController extends Controller
     public function update(Request $request, Gasto $gasto)
     {
         request()->validate([
-            'Motivo_resumido_de_salida_de_dinero' => 'required',
-            'Nombre_a_quien_se_entrego_el_dinero' => 'required',
-            'Quien_aprobo_la_entrega_de_dinero' => 'required',
+            'Motivo_resumido_de_salida_de_dinero' => 'required|regex:/^[a-zA-Z\s,.()]+$/u',
+            'Nombre_a_quien_se_entrego_el_dinero' => 'required|regex:/^[a-zA-Z\s]+$/u',
+            'Quien_aprobo_la_entrega_de_dinero' => 'required|regex:/^[a-zA-Z\s]+$/u',
             'Nro_de_comprobante' => 'required|integer',
             'Monto' => 'required|numeric|regex:/^\d+(\.\d{1,2})?$/'
         ]);

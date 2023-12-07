@@ -44,7 +44,7 @@
                     </div>
                 </div>
                 <div class="mb-3">
-                    <div class="form-floating">
+                    <div class="form-group">
                         <label class="form-label" for="Direccion_de_la_obra">Direccion de la obra</label>
                         <input type="text" name="Direccion_de_la_obra" class="form-control" placeholder="Calle/Av." value="{{ $constructora->Direccion_de_la_obra }}" required>
                     </div>
@@ -82,7 +82,7 @@
                 <div class="mb-3">
                     <div class="form-group">
                         <label class="form-label" for="Costo">Costo</label>
-                        <input type="number" name="Costo" min="0" max="100000" step="0.01" pattern="\d+(\.\d{2})?" placeholder="Bs." value="{{ $constructora->Costo }}" required>
+                        <input class="form-control" type="number" name="Costo" min="0" max="100000" step="0.01" pattern="\d+(\.\d{2})?" placeholder="Bs." value="{{ $constructora->Costo }}" required>
                     </div>
                     <div class="valid-feedback">
                         Todo bien c:!
@@ -104,7 +104,7 @@
 @stop
 
 @section('css')
-<link rel="stylesheet" href="{{ 'css/bootstrap.min.css' }}">
+<link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
 <!-- Dentro de tu archivo Blade -->
 <style>
     .bg {
@@ -118,6 +118,7 @@
 @stop
 
 @section('js')
+<script src="{{ asset('js/bootstrap.bundle.min.js') }}"></script>
 <script>
     console.log('Hola');
 </script>

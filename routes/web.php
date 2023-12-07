@@ -11,6 +11,8 @@ use App\Http\Controllers\ConstructorasController;
 use App\Http\Controllers\AlquilereController;
 use App\Http\Controllers\DepositosController;
 use App\Http\Controllers\GastosController;
+//reportes
+use App\Http\Controllers\ReportesDiariosController;
 
 /*
 |--------------------------------------------------------------------------
@@ -48,4 +50,6 @@ Route::group(['middleware' => ['auth']], function(){
     Route::resource('alquileres', AlquilereController::class);
     Route::resource('depositos', DepositosController::class);
     Route::resource('gastos', GastosController::class);
+    //Reportes
+    Route::resource('reportesdiarios', ReportesDiariosController::class);
 });

@@ -46,7 +46,7 @@
                 <div class="mb-3">
                     <div class="form-group">
                         <label class="form-label" for="Porcentaje_de_anticipo">Porcentaje de anticipo</label>
-                        <input type="number" name="Porcentaje_de_anticipo" min="0" max="100" step="0.01" pattern="\d+(\.\d{2})?" value="{{$curso->Porcentaje_de_anticipo}}" required>
+                        <input class="form-control" type="number" name="Porcentaje_de_anticipo" min="0" max="100" step="0.01" pattern="\d+(\.\d{2})?" value="{{$curso->Porcentaje_de_anticipo}}" required>
                     </div>
                     <div class="valid-feedback">
                         Todo bien c:!
@@ -56,7 +56,7 @@
                     </div>
                 </div>
                 <div class="mb-3">
-                    <div class="form-floating">
+                    <div class="form-group">
                         <label class="form-label" for="Nombre_de_persona_pago_total">Nombre de persona pago total</label>
                         <input type="text" name="Nombre_de_persona_pago_total" class="form-control" placeholder="Ejemplo: Jose" value="{{$curso->Nombre_de_persona_pago_total}}" required>
                     </div>
@@ -71,9 +71,9 @@
                     <div class="form-group">
                         <label class="form-label" for="Detalle_de_curso">Detalle de curso</label>
                         <select name="Detalle_de_curso" id="detalle" class="form-select">
-                            <option value="carpinteria" {{ $curso->Detalle_de_curso === 'Carpintería en Aluminio' ? 'selected' : '' }}>Carpintería en Aluminio</option>
-                            <option value="sketchup" {{ $curso->Detalle_de_curso === 'Scketch Up - V-Ray' ? 'selected' : '' }}>Scketch Up - V-Ray</option>
-                            <option value="manejo_redes" {{ $curso->Detalle_de_curso === 'Manejo de Redes' ? 'selected' : '' }}>Manejo de Redes</option>
+                            <option value="Carpiteria en Aluminio" {{ $curso->Detalle_de_curso === 'Carpintería en Aluminio' ? 'selected' : '' }}>Carpintería en Aluminio</option>
+                            <option value="Scketch Up - V-Ray" {{ $curso->Detalle_de_curso === 'Scketch Up - V-Ray' ? 'selected' : '' }}>Scketch Up - V-Ray</option>
+                            <option value="Manejo de Redes" {{ $curso->Detalle_de_curso === 'Manejo de Redes' ? 'selected' : '' }}>Manejo de Redes</option>
                         </select>
                     </div>
                     <div class="valid-feedback">
@@ -98,7 +98,7 @@
                 <div class="mb-3">
                     <div class="form-group">
                         <label class="form-label" for="Ingresos">Ingresos</label>
-                        <input type="number" name="Ingresos" min="0" max="100000" step="0.01" pattern="\d+(\.\d{2})?" placeholder="Bs." value="{{$curso->Ingresos}}" required>
+                        <input class="form-control" type="number" name="Ingresos" min="0" max="100000" step="0.01" pattern="\d+(\.\d{2})?" placeholder="Bs." value="{{$curso->Ingresos}}" required>
                     </div>
                     <div class="valid-feedback">
                         Todo bien c:!
@@ -120,7 +120,7 @@
 @stop
 
 @section('css')
-<link rel="stylesheet" href="{{ 'css/bootstrap.min.css' }}">
+<link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
 <!-- Dentro de tu archivo Blade -->
 <style>
     .bg {
@@ -138,5 +138,6 @@
     console.log('Hola');
 </script>
 <!-- validaciones del frontend-->
+<script src="{{ asset('js/bootstrap.bundle.min.js') }}"></script>
 <script src="{{ asset('js/validation.js') }}"></script>
 @stop

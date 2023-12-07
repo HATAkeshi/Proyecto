@@ -41,8 +41,8 @@ class ConstructorasController extends Controller
     public function store(Request $request)
     {
         request()->validate([
-            'Dueño_de_la_obra' => 'required',
-            'Direccion_de_la_obra' => 'required',
+            'Dueño_de_la_obra' => 'required|regex:/^[a-zA-Z\s]+$/u',
+            'Direccion_de_la_obra' => 'required|regex:/^[a-zA-Z\s]+$/u',
             'Fecha_inicio_de_Obra' => 'required|date',
             'Fecha_fin_de_Obra' => 'required|date',
             'Costo' => 'required|numeric|regex:/^\d+(\.\d{1,2})?$/'
@@ -73,8 +73,8 @@ class ConstructorasController extends Controller
     public function update(Request $request, Constructora $constructora)
     {
         request()->validate([
-            'Dueño_de_la_obra' => 'required',
-            'Direccion_de_la_obra' => 'required',
+            'Dueño_de_la_obra' => 'required|regex:/^[a-zA-Z\s]+$/u',
+            'Direccion_de_la_obra' => 'required|regex:/^[a-zA-Z\s]+$/u',
             'Fecha_inicio_de_Obra' => 'required|date',
             'Fecha_fin_de_Obra' => 'required|date',
             'Costo' => 'required|numeric|regex:/^\d+(\.\d{1,2})?$/'

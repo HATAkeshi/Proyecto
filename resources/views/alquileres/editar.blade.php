@@ -44,9 +44,9 @@
                     </div>
                 </div>
                 <div class="mb-3">
-                    <div class="form-floating">
+                    <div class="form-group">
                         <label class="form-label" for="Detalle">Detalle</label>
-                        <textarea name="Detalle" id="Detalle" required>{{ $alquilere->Detalle }}</textarea>
+                        <textarea class="form-control" name="Detalle" id="Detalle" required>{{ $alquilere->Detalle }}</textarea>
                     </div>
                     <div class="valid-feedback">
                         Todo bien c:!
@@ -82,7 +82,7 @@
                 <div class="mb-3">
                     <div class="form-group">
                         <label class="form-label" for="Retraso_de_entrega">Retraso de entrega</label>
-                        <textarea name="Retraso_de_entrega" id="detalle" required>{{ $alquilere->Retraso_de_entrega }}</textarea>
+                        <textarea class="form-control" name="Retraso_de_entrega" id="detalle" required>{{ $alquilere->Retraso_de_entrega }}</textarea>
                     </div>
                     <div class="valid-feedback">
                         Todo bien c:!
@@ -106,7 +106,7 @@
                 <div class="mb-3">
                     <div class="form-group">
                         <label class="form-label" for="Ingresos">Ingresos</label>
-                        <input type="number" name="Ingresos" min="0" max="100000" step="0.01" pattern="\d+(\.\d{2})?" placeholder="Bs." value="{{ $alquilere->Ingresos }}" required>
+                        <input class="form-control" type="number" name="Ingresos" min="0" max="100000" step="0.01" pattern="\d+(\.\d{2})?" placeholder="Bs." value="{{ $alquilere->Ingresos }}" required>
                     </div>
                     <div class="valid-feedback">
                         Todo bien c:!
@@ -128,7 +128,7 @@
 @stop
 
 @section('css')
-<link rel="stylesheet" href="{{ 'css/bootstrap.min.css' }}">
+<link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
 <!-- Dentro de tu archivo Blade -->
 <style>
     .bg {
@@ -142,6 +142,7 @@
 @stop
 
 @section('js')
+<script src="{{ asset('js/bootstrap.bundle.min.js') }}"></script>
 <script>
     console.log('Hola');
 </script>

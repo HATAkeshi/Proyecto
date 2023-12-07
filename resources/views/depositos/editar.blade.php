@@ -80,7 +80,7 @@
 @stop
 
 @section('css')
-<link rel="stylesheet" href="{{ 'css/bootstrap.min.css' }}">
+<link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
 <!-- Dentro de tu archivo Blade -->
 <style>
     .bg {
@@ -94,6 +94,7 @@
 @stop
 
 @section('js')
+<script src="{{ asset('js/bootstrap.bundle.min.js') }}"></script>
 <script>
     console.log('Hola');
 </script>

@@ -363,7 +363,7 @@ return [
                 [
                     'text'       => 'Gasto Extraordinario',
                     'icon_color' => 'warning',
-                    'url'        => 'gastos',
+                    'url'        => '/gastos',
                     'class' => 'form-submenu',
                 ],
             ],
@@ -375,7 +375,7 @@ return [
             'submenu' => [
                 [
                     'text' => 'Informe diario de Caja',
-                    'url'  => '#',
+                    'url'  => '/reportesdiarios',
                     'icon_color' => 'warning'
                 ],
                 [

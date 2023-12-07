@@ -1,0 +1,7 @@
+/* El estilo CSS para el contenedor div */
+.form-group {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+  }
+  

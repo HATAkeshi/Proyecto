@@ -42,11 +42,11 @@ class AlquilereController extends Controller
     public function store(Request $request)
     {
         request()->validate([
-            'Nombre_de_persona_o_empresa' => 'required',
-            'Detalle' => 'required',
-            'Modulos' => 'required',
-            'Plataforma' => 'required',
-            'Retraso_de_entrega' => 'required',
+            'Nombre_de_persona_o_empresa' => 'required|regex:regex:/^[a-zA-Z\s]+$/u',
+            'Detalle' => 'required|regex:/^[a-zA-Z\s,.()]+$/u',
+            'Modulos' => 'required|integer',
+            'Plataforma' => 'required|integer',
+            'Retraso_de_entrega' => 'required|/^[a-zA-Z\s,.()]+$/u',
             'Nro_de_comprobante' => 'required|integer',
             'Ingresos' => 'required|numeric|regex:/^\d+(\.\d{1,2})?$/'
         ]);
@@ -79,11 +79,11 @@ class AlquilereController extends Controller
     public function update(Request $request, Alquilere $alquilere)
     {
         request()->validate([
-            'Nombre_de_persona_o_empresa' => 'required',
-            'Detalle' => 'required',
-            'Modulos' => 'required',
-            'Plataforma' => 'required',
-            'Retraso_de_entrega' => 'required',
+            'Nombre_de_persona_o_empresa' => 'required|regex:/^[a-zA-Z\s]+$/u',
+            'Detalle' => 'required|regex:/^[a-zA-Z\s,.()]+$/u',
+            'Modulos' => 'required|integer',
+            'Plataforma' => 'required|integer',
+            'Retraso_de_entrega' => 'required|regex:/^[a-zA-Z\s,.()]+$/u',
             'Numero_de_comprobante' => 'required|integer',
             'Ingresos' => 'required|numeric|regex:/^\d+(\.\d{1,2})?$/'
         ]);

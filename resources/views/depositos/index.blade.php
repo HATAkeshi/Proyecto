@@ -13,7 +13,7 @@
 @section('content')
 
 @can('crear-depositos')
-<!-- <a class="btn btn-warning" href="{{ route('frm_depositos.create') }}">Nuevo</a> -->
+<!-- <a class="btn btn-warning" href="{{ route('depositos.create') }}">Nuevo</a> -->
 @endcan
 
 <table class="table table-striped table-hover table-bordered mt-2">
@@ -54,10 +54,12 @@
 @stop
 
 @section('css')
-<link rel="stylesheet" href="/css/admin_custom.css">
+<link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
+<link rel="stylesheet" href="{{ asset('css/tablasResposive.css') }}">
 @stop
 
 @section('js')
+<script src="{{ asset('js/bootstrap.bundle.min.js') }}"></script>
 <script>
     console.log('Hola');
 </script>

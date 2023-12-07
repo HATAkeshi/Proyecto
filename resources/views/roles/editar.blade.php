@@ -40,8 +40,8 @@
                     <label class="form-label" for="name">Permisos de este Rol:</label>
                     <br />
                     @foreach ($permission as $value)
-                    <label>
-                        {{ Form::checkbox('permission[]', $value->id, in_array($value->id, $rolePermissions)? true : false, array('class' => 'name')) }}
+                    <label class="form-check-label ml-5" style="font-weight: bold;">
+                        {{ Form::checkbox('permission[]', $value->id, in_array($value->id, $rolePermissions)? true : false, array('class' => 'name form-check-input')) }}
                         {{ $value->name }}
                     </label>
                     <br />
@@ -61,7 +61,7 @@
 @stop
 
 @section('css')
-<link rel="stylesheet" href="/css/admin_custom.css">
+<link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
 <!-- Dentro de tu archivo Blade -->
 <style>
     .bg {
@@ -74,6 +74,7 @@
 @stop
 
 @section('js')
+<script src="{{ asset('js/bootstrap.bundle.min.js') }}"></script>
 <script>
     console.log('Hola');
 </script>

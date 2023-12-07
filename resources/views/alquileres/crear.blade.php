@@ -43,9 +43,9 @@
                     </div>
                 </div>
                 <div class="mb-3">
-                    <div class="form-floating">
+                    <div class="form-group">
                         <label class="form-label">Detalle</label>
-                        <textarea class="form-control" id="validationTextarea" name="Detalle" placeholder="" required></textarea>
+                        <textarea class="form-control " id="validationTextarea" name="Detalle" placeholder="" required></textarea>
                     </div>
                     <div class="valid-feedback">
                         Todo bien c:!
@@ -79,7 +79,7 @@
                     </div>
                 </div>
                 <div class="mb-3">
-                    <div class="form-floating">
+                    <div class="form-group">
                         <label class="form-label">Retraso de entrega</label>
                         <textarea class="form-control" id="validationTextarea" name="Retraso_de_entrega" placeholder="Resumen del porque" required></textarea>
                     </div>
@@ -105,7 +105,7 @@
                 <div class="mb-3">
                     <div class="form-group">
                         <label class="form-label" for="Ingresos">Ingresos</label>
-                        <input type="number" name="Ingresos" min="0" max="100000" step="0.01" pattern="\d+(\.\d{2})?" placeholder="Bs." required>
+                        <input class="form-control" type="number" name="Ingresos" min="0" max="100000" step="0.01" pattern="\d+(\.\d{2})?" placeholder="Bs." required>
                     </div>
                     <div class="valid-feedback">
                         Todo bien c:!
@@ -127,7 +127,7 @@
 @stop
 
 @section('css')
-<link rel="stylesheet" href="{{ 'css/bootstrap.min.css' }}">
+<link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
 <!-- Dentro de tu archivo Blade -->
 <style>
     .bg {
@@ -141,6 +141,7 @@
 @stop
 
 @section('js')
+<script src="{{ asset('js/bootstrap.bundle.min.js') }}"></script>
 <script>
     console.log('Hola');
 </script>

@@ -43,7 +43,7 @@ class DepositosController extends Controller
     {
         request()->validate([
             'Nro_de_transaccion' => 'required|integer',
-            'Nombre' => 'required',
+            'Nombre' => 'required|regex:/^[a-zA-Z\s]+$/u',
             'Monto' => 'required|numeric|regex:/^\d+(\.\d{1,2})?$/'
         ]);
         Deposito::create($request->all());
@@ -73,7 +73,7 @@ class DepositosController extends Controller
     {
         request()->validate([
             'Nro_de_transaccion' => 'required|integer',
-            'Nombre' => 'required',
+            'Nombre' => 'required|regex:/^[a-zA-Z\s]+$/u',
             'Monto' => 'required|numeric|regex:/^\d+(\.\d{1,2})?$/'
         ]);
         $deposito->update($request->all());
