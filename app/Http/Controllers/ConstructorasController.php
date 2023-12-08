@@ -23,8 +23,9 @@ class ConstructorasController extends Controller
      */
     public function index()
     {
+        $sumaConstructora = Constructora::sum('Costo');
         $constructoras = Constructora::paginate(5);
-        return view('constructoras.index', compact('constructoras'));
+        return view('constructoras.index', compact('constructoras', 'sumaConstructora'));
     }
 
     /**

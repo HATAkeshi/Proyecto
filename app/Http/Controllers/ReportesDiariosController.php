@@ -9,6 +9,8 @@ use App\Models\Constructora;
 use App\Models\Curso;
 use App\Models\Deposito;
 use App\Models\Gasto;
+//fechas
+use Carbon\Carbon;
 
 class ReportesDiariosController extends Controller
 {
@@ -17,10 +19,24 @@ class ReportesDiariosController extends Controller
      */
     public function index()
     {
-      /*   //para filtrar por fecha 
-        $fecha = $request->input('fecha');
-        $desde = $request->input('desde');
-        $hasta = $request->input('hasta'); */
+        //sumas y restas de tablas
+        $sumaCursos = Curso::sum('Ingresos');
+        $sumaAlquileres = Alquilere::sum('Ingresos');
+        $sumaDepositos = Deposito::sum('Monto');
+        $sumaGastos = Gasto::sum('Monto');
+        $sumaIngresos = $sumaCursos + $sumaAlquileres;
+        $restandoEgresos = $sumaIngresos - $sumaGastos;
+        
+        //tablas sumadas solo del dia actual
+        $fechaActual = Carbon::today();
+        // Obtener los ingresos de cursos y alquileres del día actual
+        $sumaCursosActual = Curso::whereDate('created_at', $fechaActual)->sum('Ingresos');
+        $sumaAlquileresActual = Alquilere::whereDate('created_at', $fechaActual)->sum('Ingresos');
+        $sumaDepositosActual = Deposito::whereDate('created_at', $fechaActual)->sum('Monto');
+        $sumaGastosActual = Gasto::whereDate('created_at', $fechaActual)->sum('Monto');
+        //sumando para la tablas actuales
+        $sumaCursosAlquileresActual = $sumaCursosActual + $sumaAlquileresActual;
+        $sumaDepositosGastosActual = $sumaDepositosActual + $sumaGastosActual;
 
         //para mostrar las tablas que se crearon en el dia 
         $fecha = date('Y-m-d');
@@ -29,7 +45,7 @@ class ReportesDiariosController extends Controller
         $depositos = Deposito::whereDate('created_at', $fecha)->get();
         $gastos = Gasto::whereDate('created_at', $fecha)->get();
 
-        return view('reportesdiarios.index')->with([
+        return view('reportesdiarios.index', compact('restandoEgresos', 'sumaCursosActual', 'sumaAlquileresActual', 'sumaDepositosActual', 'sumaGastosActual', 'sumaCursosAlquileresActual', 'sumaDepositosGastosActual'))->with([
             'alquileres' => $alquileres,
             'cursos' => $cursos,
             'depositos' => $depositos,

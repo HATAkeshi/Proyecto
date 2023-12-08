@@ -24,8 +24,9 @@ class GastosController extends Controller
      */
     public function index()
     {
+        $sumaGastos = Gasto::sum('Monto');
         $gastos = Gasto::paginate(5);
-        return view('gastos.index', compact('gastos'));
+        return view('gastos.index', compact('gastos', 'sumaGastos'));
     }
 
     /**

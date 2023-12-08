@@ -24,8 +24,9 @@ class DepositosController extends Controller
      */
     public function index()
     {
+        $sumaDepositos = Deposito::sum('Monto');
         $depositos = Deposito::paginate(5);
-        return view('depositos.index', compact('depositos'));
+        return view('depositos.index', compact('depositos', 'sumaDepositos'));
     }
 
     /**
@@ -33,7 +34,7 @@ class DepositosController extends Controller
      */
     public function create()
     {
-        return view('depositos.crear');
+        /* return view('depositos.crear'); */
     }
 
     /**
@@ -47,7 +48,7 @@ class DepositosController extends Controller
             'Monto' => 'required|numeric|regex:/^\d+(\.\d{1,2})?$/'
         ]);
         Deposito::create($request->all());
-        return redirect()->route('depositos.index');
+        return redirect()->route('cursos.index');
     }
 
     /**
@@ -63,7 +64,7 @@ class DepositosController extends Controller
      */
     public function edit(Deposito $deposito)
     {
-        return view('depositos.editar', compact('deposito'));
+        /* return view('depositos.editar', compact('deposito')); */
     }
 
     /**
@@ -71,13 +72,13 @@ class DepositosController extends Controller
      */
     public function update(Request $request, Deposito $deposito)
     {
-        request()->validate([
+        /* request()->validate([
             'Nro_de_transaccion' => 'required|integer',
-            'Nombre' => 'required|regex:/^[a-zA-Z\s]+$/u',
+            'NombreD' => 'required|regex:/^[a-zA-Z\s]+$/u',
             'Monto' => 'required|numeric|regex:/^\d+(\.\d{1,2})?$/'
         ]);
         $deposito->update($request->all());
-        return redirect()->route('depositos.index');
+        return redirect()->route('depositos.index'); */
     }
 
     /**
@@ -85,7 +86,7 @@ class DepositosController extends Controller
      */
     public function destroy(Deposito $deposito)
     {
-        $deposito->delete();
-        return redirect()->route('depositos.index');
+        /* $deposito->delete();
+        return redirect()->route('depositos.index'); */
     }
 }

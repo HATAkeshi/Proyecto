@@ -22,6 +22,7 @@
         <th>Nro de transaccion</th>
         <th>Nombre</th>
         <th>Monto</th>
+        <th>Acciones</th>
     </thead>
     <tbody>
         @foreach($depositos as $deposito)
@@ -31,9 +32,9 @@
             <td>{{$deposito->Nombre}}</td>
             <td>{{$deposito->Monto}}</td>
             <td>
-                <form action="{{ route('frm_depositos.destroy', $deposito->id) }}" method="post">
+                <form action="{{ route('depositos.destroy', $deposito->id) }}" method="post">
                     @can('editar-depositos')
-                    <a href="{{ route('frm_depositos.edit', $deposito->id) }}" class="btn btn-primary">Editar</a>
+                    <a href="{{ route('depositos.edit', $deposito->id) }}" class="btn btn-primary">Editar</a>
                     @endcan
 
                     @csrf
@@ -45,6 +46,10 @@
             </td>
         </tr>
         @endforeach
+        <tr style="font-weight: bold;" class="table-active">
+            <td colspan="2" style="text-align:right;">Total</td>
+            <td>{{ $sumaDepositos }}</td>
+        </tr>
     </tbody>
 </table>
 <!-- paginacion -->

@@ -24,8 +24,9 @@ class AlquilereController extends Controller
      */
     public function index()
     {
+        $sumaAlquileres = Alquilere::sum('Ingresos');
         $alquileres = Alquilere::paginate(5);
-        return view('alquileres.index', compact('alquileres'));
+        return view('alquileres.index', compact('alquileres', 'sumaAlquileres'));
     }
 
     /**
@@ -42,11 +43,11 @@ class AlquilereController extends Controller
     public function store(Request $request)
     {
         request()->validate([
-            'Nombre_de_persona_o_empresa' => 'required|regex:regex:/^[a-zA-Z\s]+$/u',
+            'Nombre_de_persona_o_empresa' => 'required|regex:/^[a-zA-Z\s]+$/u',
             'Detalle' => 'required|regex:/^[a-zA-Z\s,.()]+$/u',
             'Modulos' => 'required|integer',
             'Plataforma' => 'required|integer',
-            'Retraso_de_entrega' => 'required|/^[a-zA-Z\s,.()]+$/u',
+            'Retraso_de_entrega' => 'required|regex:/^[a-zA-Z\s,.()]+$/u',
             'Nro_de_comprobante' => 'required|integer',
             'Ingresos' => 'required|numeric|regex:/^\d+(\.\d{1,2})?$/'
         ]);

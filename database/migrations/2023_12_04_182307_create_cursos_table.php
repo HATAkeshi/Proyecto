@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('Nombre_de_persona_pago_total');
             $table->string('Detalle_de_curso');
             $table->integer('Numero_de_comprobante');
+            $table->string('metodo_pago');
             $table->decimal('Ingresos', 10, 2)->default(0.00);
             
             $table->timestamps();

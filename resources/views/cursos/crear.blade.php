@@ -28,7 +28,7 @@
     <section class="row aling-items-center">
         <div class="col col-md-6">
 
-            <form method="POST" action="{{ route('cursos.store') }} " class="mx-auto px-4 needs-validation" novalidate>
+            <form method="POST" action="{{ route('cursos.store') }} " class="mx-auto px-4 needs-validation" id="miFormulario" novalidate>
                 @csrf
                 <div class="mb-3">
                     <div class="form-group">
@@ -107,6 +107,51 @@
                     </div>
                 </div>
                 <div class="mb-3">
+                    <div class="form-group">
+                        <label for="metodo_pago" class="form-label">Método de Pago:</label>
+                        <select id="metodo_pago" class="form-control" name="metodo_pago">
+                            <option value="efectivo">Efectivo</option>
+                            <option value="deposito">Depósito Bancario</option>
+                        </select>
+                    </div>
+                </div>
+                <div id="campos_deposito" style="display: none;">
+                    <div class="mb-3">
+                        <!-- formularios para pago por depositos -->
+                        <div class="form-group">
+                            <label for="Nro_de_transaccion" class="form-label">N° de transaccion</label>
+                            <input class="form-control" type="number" name="Nro_de_transaccion">
+                            <div class="valid-feedback">
+                                Todo bien c:!
+                            </div>
+                            <div class="invalid-feedback">
+                                Este campo es nesesario
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="Nombre" class="form-label">Nombre</label>
+                            <input class="form-control" type="text" name="Nombre">
+                            <div class="valid-feedback">
+                                Todo bien c:!
+                            </div>
+                            <div class="invalid-feedback">
+                                Este campo es nesesario
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="Monto" class="form-label">Monto</label>
+                            <input class="form-control" type="number" name="Monto" min="0" max="100000" step="0.01" pattern="\d+(\.\d{2})?" placeholder="Bs.">
+                            <div class="valid-feedback">
+                                Todo bien c:!
+                            </div>
+                            <div class="invalid-feedback">
+                                Este campo es nesesario
+                            </div>
+                        </div>
+                        <br>
+                    </div>
+                </div>
+                <div class="mb-3">
                     <button type="submit" class="btn btn-primary">Guardar</button>
                 </div>
             </form>
@@ -134,6 +179,8 @@
 
 @section('js')
 <script src="{{ asset('js/bootstrap.bundle.min.js') }}"></script>
+<script src="{{ asset('js/formularioDinamico.js') }}"></script>
+<script src="{{ asset('js/validacionesDesactivadas.min.js') }}"></script>
 <script>
     console.log('Hola');
 </script>

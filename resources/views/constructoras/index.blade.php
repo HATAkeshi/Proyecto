@@ -50,6 +50,10 @@
             </td>
         </tr>
         @endforeach
+        <tr style="font-weight: bold;" class="table-active">
+            <td colspan="4" style="text-align:right;">Total</td>
+            <td>{{ $sumaConstructora }}</td>
+        </tr>
     </tbody>
 </table>
 <!-- paginacion -->

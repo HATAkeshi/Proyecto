@@ -350,6 +350,11 @@ return [
                             'url'  => '/alquileres',
                             'icon' => 'fas fa-solid fa-share fa-flip-vertical'
                         ],
+                        [
+                            'text' => 'Depositos',
+                            'url'  => '/depositos',
+                            'icon' => 'fas fa-solid fa-share fa-flip-vertical'
+                        ],
                     ],
                 ],
 

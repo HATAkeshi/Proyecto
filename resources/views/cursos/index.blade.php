@@ -25,6 +25,7 @@
         <th>Detalle de curso</th>
         <th>Numero de comprobante</th>
         <th>Ingresos</th>
+        <th>Metodo de pago</th>
         <th>Acciones</th>
     </thead>
     <tbody>
@@ -37,6 +38,7 @@
             <td>{{$curso->Detalle_de_curso}}</td>
             <td>{{$curso->Numero_de_comprobante}}</td>
             <td>{{$curso->Ingresos}}</td>
+            <td>{{$curso->metodo_pago}}</td>
             <td>
                 <form action="{{ route('cursos.destroy', $curso->id) }}" method="POST">
                     @can('editar-cursos')
@@ -52,6 +54,10 @@
             </td>
         </tr>
         @endforeach
+        <tr style="font-weight: bold;" class="table-active">
+            <td colspan="5" style="text-align:right;">Total</td>
+            <td>{{ $sumaCursos }}</td>
+        </tr>
     </tbody>
 </table>
 <!-- paginacion -->

@@ -13,15 +13,14 @@ return new class extends Migration
     {
         Schema::create('depositos', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('cursos_id')->unique();
+            $table->unsignedBigInteger('curso_id');
 
             $table->integer('Nro_de_transaccion');
             $table->string('Nombre');
             $table->decimal('Monto', 10, 2)->default(0.00);
-            
-            //llave foranea entre cursos y depositos 
-            $table->foreign('cursos_id')->references('id')->on('cursos')->onDelete('cascade')
-                ->onUpdate('cascade');
+
+            // Llave foranea entre cursos y depositos 
+            $table->foreign('curso_id')->references('id')->on('cursos')->onDelete('cascade')->onUpdate('cascade');
 
             //fecha
             $table->timestamps();
