@@ -51,6 +51,8 @@ class SeederTablePermisos extends Seeder
             'crear-gastos',
             'editar-gastos',
             'borrar-gastos',
+            //tabla de corte
+            'editar-corte',
         ];
         foreach($permisos as $permiso){
             Permission::create(['name'=>$permiso]);

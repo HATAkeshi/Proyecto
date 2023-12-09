@@ -40,7 +40,7 @@
 <hr>
 <section>
     <fieldset>
-        <h4>Alquir de Andamios</h4>
+        <h4>Alquiler de Andamios</h4>
         <table class="table table-striped table-hover table-bordered mt-2">
             <thead class="table-dark">
                 <th style="display: none">ID</th>
@@ -147,9 +147,90 @@
 </section>
 <!-- las otras dos tablas  -->
 <BR></BR>
+
+<!-- Seccion donde se ingresa datos del corte -->
+
+<section class="container-fluid">
+    <div class="col-lg-2 offset-lg-10">
+        <table class="table table-striped table-hover table-bordered mt-2">
+            <thead class="table-dark">
+                <tr style="font-weight: bold;">
+                    <th>CORTE</th>
+                    <th>TOTAL (Bs)</th>
+                    <th>ACCIONES</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach ($diarios as $diario)
+                <tr class="">
+                    <td>MONEDAS</td>
+                    <td>{{ $diario->monedas }}</td>
+                </tr>
+                <tr class="">
+                    <td>BILLETES</td>
+                    <td>{{ $diario->billetes }}</td>
+                </tr>
+                @endforeach
+                <tr style="font-weight: bold;">
+                    <td>TOTAL</td>
+                    <td></td>
+                    <td>@can('editar-corte')
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+                            Añadir
+                        </button>
+                        @endcan
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</section>
+@if ($errors->any())
+<div class="alert alert-dark alert-dimissible fade show" role="alert">
+    <strong>¡Revise los campos >:c!</strong>
+    @foreach ($errors->all() as $error)
+    <span class="badge badge-danger">{{$error}}</span>
+    @endforeach
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+@endif
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Añadir Datos</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="formData">
+                    @csrf
+                    <input type="hidden" id="csrf-token" value="{{ csrf_token() }}">
+                    <div class="form-group">
+                        <label for="monedas">Monedas</label>
+                        <input type="text" class="form-control" id="monedas" name="monedas">
+                    </div>
+                    <div class="form-group">
+                        <label for="billetes">Billetes</label>
+                        <input type="text" class="form-control" id="billetes" name="billetes">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-primary" data-url="{{ route('diarios.store') }}" onclick="guardarDatos()">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <h3>DETALLE DE INGRESO DE EFECTIVO EN CAJA</h3>
 <hr>
-<SECtion>
+<section>
     <fieldset>
         <h4>Depositos</h4>
         <table class="table table-striped table-hover table-bordered mt-2">
@@ -231,7 +312,7 @@
             </tbody>
         </table>
     </fieldset>
-</SECtion>
+</section>
 <section class="container-fluid">
     <div class="col-lg-12">
         <div class="">
@@ -253,7 +334,9 @@
 @stop
 
 @section('js')
+<script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 <script src="{{ asset('js/bootstrap.bundle.min.js') }}"></script>
+<script src="{{ asset('js/formCorte.js') }}"></script>
 <script>
     console.log('Hola');
 </script>

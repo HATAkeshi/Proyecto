@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 //referenciamos el modelo
 use App\Models\Curso;
 use App\Models\Deposito;
+use Illuminate\Support\Facades\Validator;
 
 class CursosController extends Controller
 {
@@ -98,35 +99,52 @@ class CursosController extends Controller
      */
     public function update(Request $request, Curso $curso)
     {
-        request()->validate([
+        $validator = Validator::make($request->all(), [
             'Nombre_de_persona' => 'required|regex:/^[a-zA-Z\s]+$/u',
             'Porcentaje_de_anticipo' => 'required|integer',
             'Nombre_de_persona_pago_total' => 'required|regex:/^[a-zA-Z\s]+$/u',
             'Detalle_de_curso' => 'required|in:Carpiteria en Aluminio,Scketch Up - V-Ray,Manejo de Redes',
             'Numero_de_comprobante' => 'required|integer',
-            'Ingresos' => 'required|numeric|regex:/^\d+(\.\d{1,2})?$/'
+            'Ingresos' => 'required|numeric|regex:/^\d+(\.\d{1,2})?$/',
+            //para depositos 
+            'Nro_de_transaccion' => $request->metodo_pago === 'deposito' ? 'required|integer' : '',
+            'Nombre' => $request->metodo_pago === 'deposito' ? 'required|regex:/^[a-zA-Z\s]+$/u' : '',
+            'Monto' => $request->metodo_pago === 'deposito' ? 'required|numeric|regex:/^\d+(\.\d{1,2})?$/' : '',
         ]);
+
+        $validator->sometimes('Nro_de_transaccion', 'required', function ($input) {
+            return $input->metodo_pago === 'deposito';
+        });
+
+        $validator->sometimes('Nombre', 'required', function ($input) {
+            return $input->metodo_pago === 'deposito';
+        });
+
+        $validator->sometimes('Monto', 'required', function ($input) {
+            return $input->metodo_pago === 'deposito';
+        });
+
+        // Verifica si hay errores de validación
+        if ($validator->fails()) {
+            // Manejar los errores de validación aquí, por ejemplo:
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
+
         $curso->update($request->all());
 
-        $deposito = $curso->depositos()->first(); // O busca el depósito de alguna manera específica
+        $curso->update($request->except(['Nro_de_transaccion', 'Nombre', 'Monto']));
 
-        if ($deposito) {
-            // Si se encontró un depósito, actualiza sus valores
-            $deposito->update([
-                'Nro_de_transaccion' => $request->Nro_de_transaccion,
-                'Nombre' => $request->Nombre,
-                'Monto' => $request->Monto,
-            ]);
-        } else {
-            // Si no se encontró un depósito, podrías crear uno nuevo
-            $nuevoDeposito = new Deposito([
-                'Nro_de_transaccion' => $request->Nro_de_transaccion,
-                'Nombre' => $request->Nombre,
-                'Monto' => $request->Monto,
-            ]);
+        if ($request->metodo_pago === 'deposito') {
+            $deposito = $curso->depositos()->first();
 
-            // Asociar el nuevo depósito con el curso
-            $curso->depositos()->save($nuevoDeposito);
+            // Verificar si se encontró un depósito y hay cambios en los datos de depósito
+            if ($deposito && ($request->Nro_de_transaccion || $request->Nombre || $request->Monto)) {
+                $deposito->update([
+                    'Nro_de_transaccion' => $request->Nro_de_transaccion,
+                    'Nombre' => $request->Nombre,
+                    'Monto' => $request->Monto,
+                ]);
+            }
         }
 
         return redirect()->route('cursos.index');

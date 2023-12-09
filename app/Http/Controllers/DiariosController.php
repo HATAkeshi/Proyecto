@@ -9,16 +9,26 @@ use App\Models\Constructora;
 use App\Models\Curso;
 use App\Models\Deposito;
 use App\Models\Gasto;
+use App\Models\Diario;
 //fechas
 use Carbon\Carbon;
 
-class ReportesDiariosController extends Controller
+class DiariosController extends Controller
 {
+    //opciones de permisos 
+    function __construct()
+    {
+        $this->middleware('permission:|editar-depositos', ['only' => ['index']]);
+        $this->middleware('permission:editar-depositos', ['only' => ['edit', 'update']]);
+    }
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
+        //mostramos los datos de la tabla 
+        $diarios = Diario::all();
+
         //sumas y restas de tablas
         $sumaCursos = Curso::sum('Ingresos');
         $sumaAlquileres = Alquilere::sum('Ingresos');
@@ -26,7 +36,7 @@ class ReportesDiariosController extends Controller
         $sumaGastos = Gasto::sum('Monto');
         $sumaIngresos = $sumaCursos + $sumaAlquileres;
         $restandoEgresos = $sumaIngresos - $sumaGastos;
-        
+
         //tablas sumadas solo del dia actual
         $fechaActual = Carbon::today();
         // Obtener los ingresos de cursos y alquileres del día actual
@@ -45,7 +55,7 @@ class ReportesDiariosController extends Controller
         $depositos = Deposito::whereDate('created_at', $fecha)->get();
         $gastos = Gasto::whereDate('created_at', $fecha)->get();
 
-        return view('reportesdiarios.index', compact('restandoEgresos', 'sumaCursosActual', 'sumaAlquileresActual', 'sumaDepositosActual', 'sumaGastosActual', 'sumaCursosAlquileresActual', 'sumaDepositosGastosActual'))->with([
+        return view('diarios.index', compact('diarios', 'restandoEgresos', 'sumaCursosActual', 'sumaAlquileresActual', 'sumaDepositosActual', 'sumaGastosActual', 'sumaCursosAlquileresActual', 'sumaDepositosGastosActual'))->with([
             'alquileres' => $alquileres,
             'cursos' => $cursos,
             'depositos' => $depositos,
@@ -66,8 +76,22 @@ class ReportesDiariosController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $this->validate($request, [
+            'monedas' => 'required|numeric',
+            'billetes' => 'required|numeric',
+        ]);
+
+        // Guardar los datos en la base de datos
+        Diario::create([
+            'monedas' => $request->monedas,
+            'billetes' => $request->billetes,
+        ]);
+
+        return response()->json(['message' => 'Diario guardado con éxito']);
+
+        return redirect()->route('diarios.index')->with('Creado con éxito c:');
     }
+
 
     /**
      * Display the specified resource.

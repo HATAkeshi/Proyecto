@@ -380,7 +380,7 @@ return [
             'submenu' => [
                 [
                     'text' => 'Informe diario de Caja',
-                    'url'  => '/reportesdiarios',
+                    'url'  => '/diarios',
                     'icon_color' => 'warning'
                 ],
                 [
