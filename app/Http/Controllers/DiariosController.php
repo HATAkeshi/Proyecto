@@ -27,7 +27,7 @@ class DiariosController extends Controller
     public function index()
     {
         //mostramos los datos de la tabla 
-        $diarios = Diario::all();
+        $diarios = Diario::orderBy('created_at', 'desc')->take(1)->get();
 
         //sumas y restas de tablas
         $sumaCursos = Curso::sum('Ingresos');
@@ -44,9 +44,11 @@ class DiariosController extends Controller
         $sumaAlquileresActual = Alquilere::whereDate('created_at', $fechaActual)->sum('Ingresos');
         $sumaDepositosActual = Deposito::whereDate('created_at', $fechaActual)->sum('Monto');
         $sumaGastosActual = Gasto::whereDate('created_at', $fechaActual)->sum('Monto');
+        $ultimoRegistro = Diario::latest()->first();
+        $sumaRecorte = $ultimoRegistro->monedas + $ultimoRegistro->billetes;
         //sumando para la tablas actuales
         $sumaCursosAlquileresActual = $sumaCursosActual + $sumaAlquileresActual;
-        $sumaDepositosGastosActual = $sumaDepositosActual + $sumaGastosActual;
+        $sumaDepGasRecActual = $sumaDepositosActual + $sumaGastosActual + $sumaRecorte;
 
         //para mostrar las tablas que se crearon en el dia 
         $fecha = date('Y-m-d');
@@ -55,7 +57,7 @@ class DiariosController extends Controller
         $depositos = Deposito::whereDate('created_at', $fecha)->get();
         $gastos = Gasto::whereDate('created_at', $fecha)->get();
 
-        return view('diarios.index', compact('diarios', 'restandoEgresos', 'sumaCursosActual', 'sumaAlquileresActual', 'sumaDepositosActual', 'sumaGastosActual', 'sumaCursosAlquileresActual', 'sumaDepositosGastosActual'))->with([
+        return view('diarios.index', compact('diarios', 'restandoEgresos', 'sumaCursosActual', 'sumaAlquileresActual', 'sumaDepositosActual', 'sumaGastosActual', 'sumaCursosAlquileresActual', 'sumaDepGasRecActual', 'sumaRecorte'))->with([
             'alquileres' => $alquileres,
             'cursos' => $cursos,
             'depositos' => $depositos,
@@ -86,10 +88,7 @@ class DiariosController extends Controller
             'monedas' => $request->monedas,
             'billetes' => $request->billetes,
         ]);
-
-        return response()->json(['message' => 'Diario guardado con éxito']);
-
-        return redirect()->route('diarios.index')->with('Creado con éxito c:');
+        return redirect()->route('diarios.index')->with('success', 'Creado con éxito c:');
     }
 
 

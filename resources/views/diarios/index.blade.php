@@ -23,21 +23,22 @@
         </div>
     </div>
 </section>
+
 <section class="container-fluid">
     <div class="col-lg-2 offset-lg-10">
-        <div class="">
-            <table class="table table-striped table-hover table-bordered mt-2">
-                <thead class="table-dark">
-                    <th style="text-align:right;">Saldo Final del dia:</th>
-                    <td>{{ $restandoEgresos }}</td>
-                </thead>
-            </table>
-        </div>
+        <table class="table table-striped table-hover table-bordered mt-2">
+            <thead class="table-dark">
+                <th style="text-align:right;">Saldo Final del dia:</th>
+                <td>{{ $restandoEgresos }}</td>
+            </thead>
+        </table>
     </div>
 </section>
+
 <hr>
 <h3>DETALLE DE DOCUMENTOS RECEPCION DE INGRESOS</h3>
 <hr>
+
 <section>
     <fieldset>
         <h4>Alquiler de Andamios</h4>
@@ -133,18 +134,18 @@
         </table>
     </fieldset>
 </section>
+
 <section class="container-fluid">
     <div class="col-lg-12">
-        <div class="">
-            <table class="table table-striped table-hover table-bordered mt-2">
-                <thead class="table-dark">
-                    <th style="text-align:right;">TOTAL INGRESO</th>
-                    <td>{{ $sumaCursosAlquileresActual }}</td>
-                </thead>
-            </table>
-        </div>
+        <table class="table table-striped table-hover table-bordered mt-2">
+            <thead class="table-dark">
+                <th style="text-align:right;">TOTAL INGRESO</th>
+                <td>{{ $sumaCursosAlquileresActual }}</td>
+            </thead>
+        </table>
     </div>
 </section>
+
 <!-- las otras dos tablas  -->
 <BR></BR>
 
@@ -152,37 +153,38 @@
 
 <section class="container-fluid">
     <div class="col-lg-2 offset-lg-10">
-        <table class="table table-striped table-hover table-bordered mt-2">
-            <thead class="table-dark">
-                <tr style="font-weight: bold;">
-                    <th>CORTE</th>
-                    <th>TOTAL (Bs)</th>
-                    <th>ACCIONES</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach ($diarios as $diario)
-                <tr class="">
-                    <td>MONEDAS</td>
-                    <td>{{ $diario->monedas }}</td>
-                </tr>
-                <tr class="">
-                    <td>BILLETES</td>
-                    <td>{{ $diario->billetes }}</td>
-                </tr>
-                @endforeach
-                <tr style="font-weight: bold;">
-                    <td>TOTAL</td>
-                    <td></td>
-                    <td>@can('editar-corte')
-                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
-                            Añadir
-                        </button>
-                        @endcan
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+        <div id="tablaDatos" data-url="{{ route('depositos.store') }}">
+            <table class="table table-striped table-hover table-bordered mt-2">
+                <thead class="table-dark">
+                    <tr style="font-weight: bold;">
+                        <th>CORTE</th>
+                        <th>TOTAL (Bs)</th>
+                        <th>ACCIONES</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($diarios as $diario)
+                    <tr class="">
+                        <td>MONEDAS</td>
+                        <td>{{ $diario->monedas }}</td>
+                    </tr>
+                    <tr class="">
+                        <td>BILLETES</td>
+                        <td>{{ $diario->billetes }}</td>
+                    </tr>
+                    @endforeach
+                    <tr style="font-weight: bold;">
+                        <td>TOTAL</td>
+                        <td>{{ $sumaRecorte }}</td>
+                        <td>
+                            @can('editar-corte')
+                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" >Añadir</button>
+                            @endcan
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
 </section>
 @if ($errors->any())
@@ -221,8 +223,7 @@
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                <button type="button" class="btn btn-primary" data-url="{{ route('diarios.store') }}" onclick="guardarDatos()">Guardar</button>
+                <button type="button" class="btn btn-primary" data-url="{{ route('diarios.store') }}" onclick="guardarDatos()" data-dismiss="modal">Guardar</button>
             </div>
         </div>
     </div>
@@ -313,19 +314,19 @@
         </table>
     </fieldset>
 </section>
+
 <section class="container-fluid">
     <div class="col-lg-12">
         <div class="">
             <table class="table table-striped table-hover table-bordered mt-2">
                 <thead class="table-dark">
                     <th style="text-align:right;">TOTAL INGRESO EN EFECTIVO EN CAJA</th>
-                    <td>{{ $sumaDepositosGastosActual }}</td>
+                    <td>{{ $sumaDepGasRecActual }}</td>
                 </thead>
             </table>
         </div>
     </div>
 </section>
-
 @stop
 
 @section('css')

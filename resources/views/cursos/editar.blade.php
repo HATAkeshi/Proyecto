@@ -112,11 +112,13 @@
                     <label for="metodo_pago" class="form-label">Método de Pago:</label>
                     <select id="metodo_pago" class="form-control" name="metodo_pago">
                         <option value="efectivo" {{ $curso->metodo_pago === 'efectivo' ? 'selected' : '' }}>Efectivo</option>
-                        <option value="deposito" {{ $curso->metodo_pago === 'deposito' ? 'selected' : '' }}>Depósito Bancario</option>
+                        <option value="deposito" {{ $curso->metodo_pago === 'deposito' ? 'selected' : '' }}>Depósito</option>
                     </select>
                 </div>
                 <!-- Campos relacionados con el depósito, mostrar solo si el método de pago es un depósito -->
-                <div id="campos_deposito" @if($curso->metodo_pago === 'deposito') style="display: block;" @else style="display: none;" @endif>
+                @if ($curso->metodo_pago === 'deposito')
+
+                <div id="campos_deposito" style="display:block">
                     @foreach($curso->depositos as $deposito)
                     <div class="mb-3">
                         <div class="form-group">
@@ -157,6 +159,48 @@
                     @endforeach
                 </div>
 
+                @else
+
+                <div id="campos_deposito" style="display: none;">
+                    <div class="mb-3">
+                        <div class="form-group">
+                            <label for="Nro_de_transaccion" class="form-label">N° de transaccion</label>
+                            <input class="form-control" type="number" name="Nro_de_transaccion">
+                            <div class="valid-feedback">
+                                Todo bien c:!
+                            </div>
+                            <div class="invalid-feedback">
+                                Este campo es nesesario
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <div class="form-group">
+                            <label for="Nombre" class="form-label">Nombre</label>
+                            <input class="form-control" type="text" name="Nombre">
+                            <div class="valid-feedback">
+                                Todo bien c:!
+                            </div>
+                            <div class="invalid-feedback">
+                                Este campo es nesesario
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <div class="form-group">
+                            <label for="Monto" class="form-label">Monto</label>
+                            <input class="form-control" type="number" name="Monto" min="0" max="100000" step="0.01" pattern="\d+(\.\d{2})?" placeholder="Bs.">
+                            <div class="valid-feedback">
+                                Todo bien c:!
+                            </div>
+                            <div class="invalid-feedback">
+                                Este campo es nesesario
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                @endif
+
                 <div class="mb-3">
                     <button type="submit" class="btn btn-primary">Guardar</button>
                 </div>
@@ -173,7 +217,7 @@
 <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
 <style>
     .bg {
-        background-image: url('{{ asset("imagenesApoyo/editar-cursos.png") }}');
+        background-image: url('{{ asset("imagenesApoyo/edita-cursos.png") }}');
         background-position: center center;
         background-repeat: no-repeat;
         background-size: 50%;
@@ -185,8 +229,7 @@
 @section('js')
 <script src="{{ asset('js/bootstrap.bundle.min.js') }}"></script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="{{ asset('js/dinamismo.js') }}"></script>
-<script src="{{ asset('js/validacionesDesactivadas.min.js') }}"></script>
+<script src="{{ asset('js/dinamismoEdit.js') }}"></script>
 <script>
     console.log('Hola');
 </script>

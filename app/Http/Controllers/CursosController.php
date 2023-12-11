@@ -144,6 +144,13 @@ class CursosController extends Controller
                     'Nombre' => $request->Nombre,
                     'Monto' => $request->Monto,
                 ]);
+            } elseif (!$deposito && ($request->Nro_de_transaccion || $request->Nombre || $request->Monto)) {
+                // Si no se encontró un depósito y se proporcionan datos para crear uno nuevo
+                $curso->depositos()->create([
+                    'Nro_de_transaccion' => $request->Nro_de_transaccion,
+                    'Nombre' => $request->Nombre,
+                    'Monto' => $request->Monto,
+                ]);
             }
         }
 
