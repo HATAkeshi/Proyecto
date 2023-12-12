@@ -13,6 +13,7 @@ use App\Http\Controllers\DepositosController;
 use App\Http\Controllers\GastosController;
 //reportes
 use App\Http\Controllers\DiariosController;
+use App\Http\Controllers\IngresoegresoController;
 
 /*
 |--------------------------------------------------------------------------
@@ -37,6 +38,8 @@ Route::middleware([
     Route::get('/dashboard', function () {
         return view('dashboard');
     })->name('dashboard');
+    //redirigiendo de ome al dashborad
+    Route::redirect('/home', '/dashboard');
 });
 
 
@@ -52,4 +55,5 @@ Route::group(['middleware' => ['auth']], function(){
     Route::resource('gastos', GastosController::class);
     //Reportes
     Route::resource('diarios', DiariosController::class);
+    Route::resource('ingresoegresos', IngresoegresoController::class);
 });

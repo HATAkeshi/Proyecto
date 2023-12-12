@@ -11,11 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('diarios', function (Blueprint $table) {
+        Schema::create('ingresoegresos', function (Blueprint $table) {
             $table->id();
-            $table->integer('monedas')->nullable()->default('0');
-            $table->integer('billetes')->nullable()->default('0');
             $table->timestamps();
+            $table->string('Detalle')->nullable()->default('Reporte');;
+            $table->string('Nombre')->nullable()->default('-');;
+            $table->integer('Ingreso');
+            $table->integer('Egreso');
+            $table->integer('Saldo');
+            $table->date('fecha');
         });
     }
 
@@ -24,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('diarios');
+        Schema::dropIfExists('ingresoegresos');
     }
 };

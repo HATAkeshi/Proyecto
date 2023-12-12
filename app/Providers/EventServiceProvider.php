@@ -18,6 +18,12 @@ class EventServiceProvider extends ServiceProvider
         Registered::class => [
             SendEmailVerificationNotification::class,
         ],
+        'App\Events\CursoUpdated' => [
+            'App\Listeners\UpdateIngresoEgresoFromCurso',
+        ],
+        'App\Events\AlquilereUpdated' => [
+            'App\Listeners\UpdateIngresoEgresoFromAlquilere',
+        ],
     ];
 
     /**
@@ -33,6 +39,6 @@ class EventServiceProvider extends ServiceProvider
      */
     public function shouldDiscoverEvents(): bool
     {
-        return false;
+        return true;
     }
 }

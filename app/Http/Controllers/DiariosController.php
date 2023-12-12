@@ -10,6 +10,8 @@ use App\Models\Curso;
 use App\Models\Deposito;
 use App\Models\Gasto;
 use App\Models\Diario;
+//reportes
+use App\Models\Ingresoegreso;
 //fechas
 use Carbon\Carbon;
 
@@ -34,8 +36,11 @@ class DiariosController extends Controller
         $sumaAlquileres = Alquilere::sum('Ingresos');
         $sumaDepositos = Deposito::sum('Monto');
         $sumaGastos = Gasto::sum('Monto');
+        //saldo inicial del dia
+        // Obtener el valor de IngresosEgresos del día anterior
+        $saldoDiaAnterior = Ingresoegreso::whereDate('fecha', today()->subDay())->value('Ingreso');
+        //saldo final del dia
         $sumaIngresos = $sumaCursos + $sumaAlquileres;
-        $restandoEgresos = $sumaIngresos - $sumaGastos;
 
         //tablas sumadas solo del dia actual
         $fechaActual = Carbon::today();
@@ -45,10 +50,11 @@ class DiariosController extends Controller
         $sumaDepositosActual = Deposito::whereDate('created_at', $fechaActual)->sum('Monto');
         $sumaGastosActual = Gasto::whereDate('created_at', $fechaActual)->sum('Monto');
         $ultimoRegistro = Diario::latest()->first();
-        $sumaRecorte = $ultimoRegistro->monedas + $ultimoRegistro->billetes;
+        $sumaRecorte = ($ultimoRegistro->monedas ?? 0) + ($ultimoRegistro->billetes ?? 0);
         //sumando para la tablas actuales
         $sumaCursosAlquileresActual = $sumaCursosActual + $sumaAlquileresActual;
         $sumaDepGasRecActual = $sumaDepositosActual + $sumaGastosActual + $sumaRecorte;
+        $saldoTotal = $sumaCursosAlquileresActual + $sumaDepGasRecActual;
 
         //para mostrar las tablas que se crearon en el dia 
         $fecha = date('Y-m-d');
@@ -57,7 +63,7 @@ class DiariosController extends Controller
         $depositos = Deposito::whereDate('created_at', $fecha)->get();
         $gastos = Gasto::whereDate('created_at', $fecha)->get();
 
-        return view('diarios.index', compact('diarios', 'restandoEgresos', 'sumaCursosActual', 'sumaAlquileresActual', 'sumaDepositosActual', 'sumaGastosActual', 'sumaCursosAlquileresActual', 'sumaDepGasRecActual', 'sumaRecorte'))->with([
+        return view('diarios.index', compact('diarios', 'sumaIngresos', 'saldoDiaAnterior',  'sumaCursosActual', 'sumaAlquileresActual', 'sumaDepositosActual', 'sumaGastosActual', 'sumaCursosAlquileresActual', 'sumaDepGasRecActual', 'sumaRecorte'))->with([
             'alquileres' => $alquileres,
             'cursos' => $cursos,
             'depositos' => $depositos,
@@ -79,8 +85,8 @@ class DiariosController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            'monedas' => 'required|numeric',
-            'billetes' => 'required|numeric',
+            'monedas' => 'numeric',
+            'billetes' => 'numeric',
         ]);
 
         // Guardar los datos en la base de datos

@@ -11,25 +11,26 @@
 @stop
 
 @section('content')
+<!-- saldo inicial del dia -->
 <section class="container-fluid">
     <div class="col-lg-2 offset-lg-10">
         <div class="">
             <table class="table table-striped table-hover table-bordered mt-2">
                 <thead class="table-dark">
                     <th style="text-align:right;">Saldo Inicial del dia:</th>
-                    <td>{{ $restandoEgresos }}</td>
+                    <td>{{ $saldoDiaAnterior }}</td>
                 </thead>
             </table>
         </div>
     </div>
 </section>
-
+<!-- saldo final del dia -->
 <section class="container-fluid">
     <div class="col-lg-2 offset-lg-10">
         <table class="table table-striped table-hover table-bordered mt-2">
             <thead class="table-dark">
                 <th style="text-align:right;">Saldo Final del dia:</th>
-                <td>{{ $restandoEgresos }}</td>
+                <td>{{ $sumaIngresos }}</td>
             </thead>
         </table>
     </div>
@@ -187,6 +188,7 @@
         </div>
     </div>
 </section>
+<!-- se verifica errores -->
 @if ($errors->any())
 <div class="alert alert-dark alert-dimissible fade show" role="alert">
     <strong>¡Revise los campos >:c!</strong>
@@ -198,7 +200,7 @@
     </button>
 </div>
 @endif
-<!-- Modal -->
+<!-- Modal donde añado los datos del corte-->
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">

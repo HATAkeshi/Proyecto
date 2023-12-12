@@ -384,9 +384,14 @@ return [
                     'icon_color' => 'warning'
                 ],
                 [
+                    'text' => 'Informe de Ingresos Egresos',
+                    'url'  => '/ingresoegresos',
+                    'icon_color' => 'danger'
+                ],
+                [
                     'text'    => 'Informe de Cursos',
                     'url'     => '#',
-                    'icon_color' => 'danger',
+                    'icon_color' => 'warning',
                     'submenu' => [
                         [
                             'text' => 'Carpiteria en Aluminio',
@@ -403,7 +408,7 @@ return [
                 [
                     'text' => 'Informe de Alquiler de Andamios',
                     'url'  => '#',
-                    'icon_color' => 'warning'
+                    'icon_color' => 'danger'
                 ],
             ]
         ],
