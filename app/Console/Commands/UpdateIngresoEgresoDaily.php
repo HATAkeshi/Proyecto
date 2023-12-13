@@ -33,28 +33,31 @@ class UpdateIngresoEgresoDaily extends Command
     {
         $fechaActual = now();
 
-        /* // Obtener el registro para la fecha actual si existe
-        $registroActual = Ingresoegreso::where('fecha', $fechaActual)->first(); */
-
-        //vemos si ya existe el registro y si es haci lo actualizamos e ves de crear uno nuevo 
+        //vemos si ya existe el registro y si es haci lo actualizamos en ves de crear uno nuevo 
         $registroActual = Ingresoegreso::where('fecha', $fechaActual)->first();
 
         // Calcula la suma de Cursos y Alquileres
-        $sumaCursos = Curso::whereDate('created_at', $fechaActual)->sum('Ingresos');
-        $sumaAlquileres = Alquilere::whereDate('created_at', $fechaActual)->sum('Ingresos');
-        //ingresos
-        $sumaTotal = $sumaCursos + $sumaAlquileres;
+        $sumaCursosActual = Curso::whereDate('created_at', $fechaActual)->sum('Ingresos');
+        $sumaAlquileresActual = Alquilere::whereDate('created_at', $fechaActual)->sum('Ingresos');
+        
+        //egreso
+        $sumaGastosActual = Gasto::whereDate('created_at', $fechaActual)->sum('Monto');
 
-        //egresos
-        $sumaGasto = Gasto::whereDate('created_at', $fechaActual)->sum('Monto');
+        //saldo del dia anterior 
+        $saldoDiaAnterior = Ingresoegreso::whereDate('fecha', today()->subDay())->value('Ingreso');
+
+        //ingresos
+        //suma total de la tala cursos y alquileres y ademas es
+        //saldo final del dia
+        $sumaCursosAlquileresAnteriorActual = $sumaCursosActual + $sumaAlquileresActual + $saldoDiaAnterior;
 
         if ($registroActual) {
             //ingreso
-            $registroActual->Ingreso = $sumaTotal;
+            $registroActual->Ingreso = $sumaCursosAlquileresAnteriorActual;
             //egreso
-            $registroActual->Egreso = $sumaGasto;
+            $registroActual->Egreso = $sumaGastosActual;
             //saldo
-            $registroActual->Saldo = $sumaTotal - $sumaGasto;
+            $registroActual->Saldo = $sumaCursosAlquileresAnteriorActual - $sumaGastosActual;
             //guardamos
             $registroActual->save();
         } else {

@@ -26,44 +26,58 @@ class DiariosController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        //mostramos los datos de la tabla 
+        //mostramos los datos de la tabla diarios solo los ultimos registros ingresados del dia actual
         $diarios = Diario::orderBy('created_at', 'desc')->take(1)->get();
 
-        //sumas y restas de tablas
-        $sumaCursos = Curso::sum('Ingresos');
-        $sumaAlquileres = Alquilere::sum('Ingresos');
-        $sumaDepositos = Deposito::sum('Monto');
-        $sumaGastos = Gasto::sum('Monto');
-        //saldo inicial del dia
-        // Obtener el valor de IngresosEgresos del día anterior
-        $saldoDiaAnterior = Ingresoegreso::whereDate('fecha', today()->subDay())->value('Ingreso');
-        //saldo final del dia
-        $sumaIngresos = $sumaCursos + $sumaAlquileres;
+        //filtrando por dia ingresado desde buscador
+        $fechaIngresada = $request->input('fecha');
+        $fechaActual = $fechaIngresada ? Carbon::parse($fechaIngresada)->toDateString() : Carbon::today()->toDateString();
 
-        //tablas sumadas solo del dia actual
-        $fechaActual = Carbon::today();
         // Obtener los ingresos de cursos y alquileres del día actual
         $sumaCursosActual = Curso::whereDate('created_at', $fechaActual)->sum('Ingresos');
         $sumaAlquileresActual = Alquilere::whereDate('created_at', $fechaActual)->sum('Ingresos');
         $sumaDepositosActual = Deposito::whereDate('created_at', $fechaActual)->sum('Monto');
         $sumaGastosActual = Gasto::whereDate('created_at', $fechaActual)->sum('Monto');
-        $ultimoRegistro = Diario::latest()->first();
+
+        //tabla de cortes de billetes y monedas de la tabla recorte 
+        $ultimoRegistro = Diario::whereDate('created_at', $fechaActual)->latest()->first();
         $sumaRecorte = ($ultimoRegistro->monedas ?? 0) + ($ultimoRegistro->billetes ?? 0);
-        //sumando para la tablas actuales
-        $sumaCursosAlquileresActual = $sumaCursosActual + $sumaAlquileresActual;
+
+        // Obtener el valor de IngresosEgresos del día anterior
+        //saldo inicial
+        $saldoDiaAnterior = Ingresoegreso::whereDate('fecha', today()->subDay())->value('Ingreso');
+
+        // Si hay una fecha filtrada, obtener el registro del día anterior a esa fecha
+        if ($fechaIngresada) {
+            $saldoDiaAnterior = Ingresoegreso::whereDate('fecha', '<', $fechaIngresada)
+                ->orderByDesc('fecha')
+                ->first();
+        } else {
+            // Si no hay fecha filtrada, obtener el registro del día anterior al día actual
+            $saldoDiaAnterior = Ingresoegreso::whereDate('fecha', today()->subDay())
+                ->first();
+        }
+        // Obtener el valor del día anterior y si no existe asignarle un cero 
+        $saldoDiaAnterior = $saldoDiaAnterior ? $saldoDiaAnterior->Ingreso : 0;
+
+        //suma total de la tala cursos y alquileres y ademas es
+        //saldo final del dia
+        $sumaCursosAlquileresAnteriorActual = $sumaCursosActual + $sumaAlquileresActual + $saldoDiaAnterior;
+
+        //total de las tablas recorte depositos gastos
         $sumaDepGasRecActual = $sumaDepositosActual + $sumaGastosActual + $sumaRecorte;
-        $saldoTotal = $sumaCursosAlquileresActual + $sumaDepGasRecActual;
 
         //para mostrar las tablas que se crearon en el dia 
-        $fecha = date('Y-m-d');
-        $alquileres = Alquilere::whereDate('created_at', $fecha)->get();
-        $cursos = Curso::whereDate('created_at', $fecha)->get();
-        $depositos = Deposito::whereDate('created_at', $fecha)->get();
-        $gastos = Gasto::whereDate('created_at', $fecha)->get();
+        $alquileres = Alquilere::whereDate('created_at', $fechaActual)->get();
+        $cursos = Curso::whereDate('created_at', $fechaActual)->get();
+        $depositos = Deposito::whereDate('created_at', $fechaActual)->get();
+        $gastos = Gasto::whereDate('created_at', $fechaActual)->get();
 
-        return view('diarios.index', compact('diarios', 'sumaIngresos', 'saldoDiaAnterior',  'sumaCursosActual', 'sumaAlquileresActual', 'sumaDepositosActual', 'sumaGastosActual', 'sumaCursosAlquileresActual', 'sumaDepGasRecActual', 'sumaRecorte'))->with([
+        return view('diarios.index', compact('diarios', 'saldoDiaAnterior', 'sumaCursosAlquileresAnteriorActual', 'fechaActual', 'sumaAlquileresActual',  'sumaCursosActual', 'sumaDepositosActual', 'sumaGastosActual', 'sumaDepGasRecActual', 'sumaRecorte'))->with([
+            'ultimoRegistro' => $ultimoRegistro,
+            //demas variables
             'alquileres' => $alquileres,
             'cursos' => $cursos,
             'depositos' => $depositos,

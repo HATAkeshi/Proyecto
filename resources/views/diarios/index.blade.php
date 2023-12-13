@@ -11,6 +11,26 @@
 @stop
 
 @section('content')
+
+<!-- filtrador por fecha -->
+<section>
+    <div class="col-md-4">
+        <form method="GET" action="{{ route('diarios.index') }}">
+            @csrf
+            <div class="row mb-3 align-items-center">
+                <div class="col-auto">
+                    <label for="fecha" class="form-label">Buscar por fecha:</label>
+                </div>
+                <div class="col-auto">
+                    <input type="date" id="fecha" name="fecha" class="form-control">
+                </div>
+                <div class="col-auto">
+                    <button type="submit" class="btn btn-primary">Buscar</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</section>
 <!-- saldo inicial del dia -->
 <section class="container-fluid">
     <div class="col-lg-2 offset-lg-10">
@@ -18,7 +38,7 @@
             <table class="table table-striped table-hover table-bordered mt-2">
                 <thead class="table-dark">
                     <th style="text-align:right;">Saldo Inicial del dia:</th>
-                    <td>{{ $saldoDiaAnterior }}</td>
+                    <td>{{ $saldoDiaAnterior  }}</td>
                 </thead>
             </table>
         </div>
@@ -30,7 +50,7 @@
         <table class="table table-striped table-hover table-bordered mt-2">
             <thead class="table-dark">
                 <th style="text-align:right;">Saldo Final del dia:</th>
-                <td>{{ $sumaIngresos }}</td>
+                <td>{{ $sumaCursosAlquileresAnteriorActual }}</td>
             </thead>
         </table>
     </div>
@@ -42,6 +62,7 @@
 
 <section>
     <fieldset>
+        <!-- tabla de alquileres -->
         <h4>Alquiler de Andamios</h4>
         <table class="table table-striped table-hover table-bordered mt-2">
             <thead class="table-dark">
@@ -135,13 +156,13 @@
         </table>
     </fieldset>
 </section>
-
+<!-- total de tablas cursos y alquileres  -->
 <section class="container-fluid">
     <div class="col-lg-12">
         <table class="table table-striped table-hover table-bordered mt-2">
             <thead class="table-dark">
                 <th style="text-align:right;">TOTAL INGRESO</th>
-                <td>{{ $sumaCursosAlquileresActual }}</td>
+                <td>{{ $sumaCursosAlquileresAnteriorActual }}</td>
             </thead>
         </table>
     </div>
@@ -150,8 +171,7 @@
 <!-- las otras dos tablas  -->
 <BR></BR>
 
-<!-- Seccion donde se ingresa datos del corte -->
-
+<!-- Seccion donde se guarda0 los datos del corte -->
 <section class="container-fluid">
     <div class="col-lg-2 offset-lg-10">
         <div id="tablaDatos" data-url="{{ route('depositos.store') }}">
@@ -167,20 +187,34 @@
                     @foreach ($diarios as $diario)
                     <tr class="">
                         <td>MONEDAS</td>
-                        <td>{{ $diario->monedas }}</td>
+                        <td>
+                            @if($ultimoRegistro)
+                            {{ $ultimoRegistro->monedas }}
+                            @else
+                            0
+                            @endif
+                        </td>
                     </tr>
                     <tr class="">
                         <td>BILLETES</td>
-                        <td>{{ $diario->billetes }}</td>
+                        <td>
+                            @if($ultimoRegistro)
+                            {{ $ultimoRegistro->billetes }}
+                            @else
+                            0
+                            @endif
+                        </td>
                     </tr>
                     @endforeach
                     <tr style="font-weight: bold;">
                         <td>TOTAL</td>
                         <td>{{ $sumaRecorte }}</td>
                         <td>
+
                             @can('editar-corte')
-                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" >Añadir</button>
+                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">Añadir</button>
                             @endcan
+
                         </td>
                     </tr>
                 </tbody>
@@ -329,6 +363,20 @@
         </div>
     </div>
 </section>
+<!-- footer -->
+<footer class="bg-body-tertiary text-center">
+  <!-- Grid container -->
+  <div class="container p-4"></div>
+  <!-- Grid container -->
+
+  <!-- Copyright -->
+  <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.05);">
+    © 2023 Copyright:
+    <a class="text-body" href="#">Ludeño.com</a>
+  </div>
+  <br>
+  <!-- Copyright -->
+</footer>
 @stop
 
 @section('css')

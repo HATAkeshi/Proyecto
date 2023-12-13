@@ -3,11 +3,14 @@
 @section('title', 'Ludeño')
 
 @section('content_header')
-<h1>Dashboard</h1>
+<div class="card">
+    <div class="card-body">
+        <h2>Grafica de Ingresos Egresos por mes y año</h2>
+    </div>
+</div>
 @stop
 
 @section('content')
-<p>Welcome to this beautiful admin panel.</p>
 
 @stop
 
