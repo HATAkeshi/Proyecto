@@ -41,7 +41,7 @@
                             <div class="mb-3">
                                 <div class="form-group">
                                     <label class="form-label" for="Nro_de_transaccion">Nro de transaccion</label>
-                                    <input type="number" name="Nro_de_transaccion" class="form-control" placeholder="Ejemplo N° 12345678" value="{{ $deposito->Nro_de_comprobante }}" required>
+                                    <input type="number" name="Nro_de_transaccion" class="form-control" placeholder="Ejemplo N° 12345678" value="{{ $deposito->Nro_de_transaccion }}" required>
                                 </div>
                                 <div class="valid-feedback">
                                     Todo bien c:!
@@ -51,9 +51,9 @@
                                 </div>
                             </div>
                             <div class="mb-3">
-                                <div class="form-floating">
+                                <div class="form-group">
                                     <label class="form-label" for="Nombre">Nombre</label>
-                                    <input type="number" name="Nombre" class="form-control" placeholder="" value="{{ $deposito->Nombre }}" required>
+                                    <input type="text" name="Nombre" class="form-control" placeholder="" value="{{ $deposito->Nombre }}" required>
                                 </div>
                                 <div class="valid-feedback">
                                     Todo bien c:!
@@ -65,7 +65,7 @@
                             <div class="mb-3">
                                 <div class="form-group">
                                     <label class="form-label" for="Monto">Monto</label>
-                                    <input type="number" name="Monto" min="0" max="100000" step="0.01" pattern="\d+(\.\d{2})?" placeholder="Bs." value="{{ $deposito->Monto }}" required>
+                                    <input class="form-control" type="number" name="Monto" min="0" max="100000" step="0.01" pattern="\d+(\.\d{2})?" placeholder="Bs." value="{{ $deposito->Monto }}" required>
                                 </div>
                                 <div class="valid-feedback">
                                     Todo bien c:!

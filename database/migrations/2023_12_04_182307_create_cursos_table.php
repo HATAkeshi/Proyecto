@@ -23,6 +23,8 @@ return new class extends Migration
             $table->decimal('Ingresos', 10, 2)->default(0.00);
             
             $table->timestamps();
+            //agragamos la eliminacion suave (soft delete)
+            $table->softDeletes();  
         });
     }
 
@@ -31,6 +33,9 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('cursos');
+        //revertimos la eliminacion sueave
+        Schema::table('cursos', function (Blueprint $table) {
+            $table->dropSoftDeletes(); 
+        });
     }
 };

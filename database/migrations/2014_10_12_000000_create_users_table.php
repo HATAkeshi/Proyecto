@@ -21,6 +21,8 @@ return new class extends Migration
             $table->foreignId('current_team_id')->nullable();
             $table->string('profile_photo_path', 2048)->nullable();
             $table->timestamps();
+            //agragamos la eliminacion suave (soft delete)
+            $table->softDeletes(); 
         });
     }
 
@@ -29,6 +31,10 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('users');
+        /* Schema::dropIfExists('users'); */
+        //revertimos la eliminacion sueave
+        Schema::table('users', function (Blueprint $table) {
+            $table->dropSoftDeletes(); 
+        });
     }
 };

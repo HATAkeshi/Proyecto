@@ -11,6 +11,8 @@ use Laravel\Jetstream\HasProfilePhoto;
 use Laravel\Sanctum\HasApiTokens;
 //spatie
 use Spatie\Permission\Traits\HasRoles;
+//eliminacion
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class User extends Authenticatable
 {
@@ -21,6 +23,8 @@ class User extends Authenticatable
     use TwoFactorAuthenticatable;
     //spatie
     use HasRoles;
+    //eliminacion suave
+    use SoftDeletes;
 
     /**
      * The attributes that are mass assignable.

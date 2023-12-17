@@ -19,6 +19,8 @@ return new class extends Migration
             $table->string('Nro_de_comprobante');
             $table->decimal('Monto', 10, 2)->default(0.00);
             $table->timestamps();
+            //agragamos la eliminacion suave (soft delete)
+            $table->softDeletes();  
         });
     }
 
@@ -27,6 +29,9 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('gastos');
+        //revertimos la eliminacion sueave
+        Schema::table('gastos', function (Blueprint $table) {
+            $table->dropSoftDeletes(); 
+        });
     }
 };

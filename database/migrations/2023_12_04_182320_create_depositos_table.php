@@ -24,6 +24,9 @@ return new class extends Migration
 
             //fecha
             $table->timestamps();
+
+            //agragamos la eliminacion suave (soft delete)
+            $table->softDeletes(); 
         });
     }
 
@@ -32,6 +35,9 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('depositos');
+        //revertimos la eliminacion sueave
+        Schema::table('depositos', function (Blueprint $table) {
+            $table->dropSoftDeletes(); 
+        });
     }
 };

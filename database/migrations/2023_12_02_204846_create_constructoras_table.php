@@ -20,6 +20,8 @@ return new class extends Migration
             $table->date('Fecha_fin_de_Obra');
             $table->decimal('Costo', 10, 2)->default(0.00);
             $table->timestamps();
+            //agragamos la eliminacion suave (soft delete)
+            $table->softDeletes(); 
         });
     }
 
@@ -28,6 +30,9 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('constructoras');
+        //revertimos la eliminacion sueave
+        Schema::table('constructoras', function (Blueprint $table) {
+            $table->dropSoftDeletes(); 
+        });
     }
 };

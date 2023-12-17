@@ -77,7 +77,7 @@ class DepositosController extends Controller
      */
     public function edit(Deposito $deposito)
     {
-        /* return view('depositos.editar', compact('deposito')); */
+        return view('depositos.editar', compact('deposito'));
     }
 
     /**
@@ -85,13 +85,13 @@ class DepositosController extends Controller
      */
     public function update(Request $request, Deposito $deposito)
     {
-        /* request()->validate([
+        request()->validate([
             'Nro_de_transaccion' => 'required|integer',
-            'NombreD' => 'required|regex:/^[a-zA-Z\s]+$/u',
+            'Nombre' => 'required|regex:/^[a-zA-Z\s]+$/u',
             'Monto' => 'required|numeric|regex:/^\d+(\.\d{1,2})?$/'
         ]);
         $deposito->update($request->all());
-        return redirect()->route('depositos.index'); */
+        return redirect()->route('depositos.index');
     }
 
     /**

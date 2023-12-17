@@ -102,13 +102,14 @@
                         <td>{{$deposito->Nombre}}</td>
                         <td>{{$deposito->Monto}}</td>
                         <td>
-                            <form action="{{ route('depositos.destroy', $deposito->id) }}" method="post">
-                                <!-- @can('editar-depositos')
-                                <a href="{{ route('depositos.edit', $deposito->id) }}" class="btn btn-primary">
-                                    <i class="fas fa-pen"></i>
-                                    Editar
-                                </a>
-                                @endcan -->
+                            @can('editar-depositos')
+                            <a href="{{ route('depositos.edit', $deposito->id) }}" class="btn btn-primary">
+                                <i class="fas fa-pen"></i>
+                                Editar
+                            </a>
+                            @endcan
+                            <!-- <form action="{{ route('depositos.destroy', $deposito->id) }}" method="post">
+                                //aqui va el editar pero de momento ocuparemos solo el editar haci que no ocuparemos el formulario
 
                                 @csrf
                                 @method('DELETE')
@@ -118,7 +119,7 @@
                                     Borrar
                                 </button>
                                 @endcan
-                            </form>
+                            </form> -->
                         </td>
                     </tr>
                     @endforeach
