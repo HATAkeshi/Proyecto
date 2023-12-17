@@ -22,10 +22,23 @@ class DepositosController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $sumaDepositos = Deposito::sum('Monto');
-        $depositos = Deposito::paginate(5);
+        //filtrador por fechas
+        $fechaInicio = $request->input('fecha_inicio');
+        $fechaFin = $request->input('fecha_fin');
+
+        // Validación de fechas y consulta
+        $query = Deposito::query();
+        if ($fechaInicio && $fechaFin) {
+            $query->whereBetween('created_at', [$fechaInicio, $fechaFin]);
+        }
+        // Obtener los resultados filtrados por fecha y si no hay nada mostrar todos los cursos
+        $depositos = $query->paginate(5);
+
+        //suma de la tabla depositos
+        $sumaDepositos = $query->sum('Monto');
+        
         return view('depositos.index', compact('depositos', 'sumaDepositos'));
     }
 

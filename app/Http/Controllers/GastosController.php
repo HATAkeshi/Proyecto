@@ -22,10 +22,23 @@ class GastosController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $sumaGastos = Gasto::sum('Monto');
-        $gastos = Gasto::paginate(5);
+        //filtrador por fechas
+        $fechaInicio = $request->input('fecha_inicio');
+        $fechaFin = $request->input('fecha_fin');
+
+        // Validación de fechas y consulta
+        $query = Gasto::query();
+        if ($fechaInicio && $fechaFin) {
+            $query->whereBetween('created_at', [$fechaInicio, $fechaFin]);
+        }
+        // Obtener los resultados filtrados por fecha y si no hay nada mostrar todos los gastos
+        $gastos = $query->paginate(5);
+        
+        //suma de todos los gastos
+        $sumaGastos = $query->sum('Monto');
+        
         return view('gastos.index', compact('gastos', 'sumaGastos'));
     }
 
@@ -46,7 +59,6 @@ class GastosController extends Controller
             'Motivo_resumido_de_salida_de_dinero' => 'required|regex:/^[a-zA-Z\s,.()]+$/u',
             'Nombre_a_quien_se_entrego_el_dinero' => 'required|regex:/^[a-zA-Z\s]+$/u',
             'Quien_aprobo_la_entrega_de_dinero' => 'required|regex:/^[a-zA-Z\s]+$/u',
-            'Nro_de_comprobante' => 'required|integer',
             'Monto' => 'required|numeric|regex:/^\d+(\.\d{1,2})?$/'
         ]);
         Gasto::create($request->all());
@@ -78,7 +90,6 @@ class GastosController extends Controller
             'Motivo_resumido_de_salida_de_dinero' => 'required|regex:/^[a-zA-Z\s,.()]+$/u',
             'Nombre_a_quien_se_entrego_el_dinero' => 'required|regex:/^[a-zA-Z\s]+$/u',
             'Quien_aprobo_la_entrega_de_dinero' => 'required|regex:/^[a-zA-Z\s]+$/u',
-            'Nro_de_comprobante' => 'required|integer',
             'Monto' => 'required|numeric|regex:/^\d+(\.\d{1,2})?$/'
         ]);
         $gasto->update($request->all());

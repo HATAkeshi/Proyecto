@@ -10,21 +10,34 @@ class ConstructorasController extends Controller
     //opciones de permisos 
     function __construct()
     {
-        $this->middleware('permission:ver-constructora|crear-constructora|editar-constructora|borrar-constructora', ['only'=>['index']]);
+        $this->middleware('permission:ver-constructora|crear-constructora|editar-constructora|borrar-constructora', ['only' => ['index']]);
 
-        $this->middleware('permission:crear-constructora', ['only'=>['create','store']]);
+        $this->middleware('permission:crear-constructora', ['only' => ['create', 'store']]);
         //editar
-        $this->middleware('permission:editar-constructora', ['only'=>['edit','update']]);
+        $this->middleware('permission:editar-constructora', ['only' => ['edit', 'update']]);
         //borrar
-        $this->middleware('permission:borrar-constructora', ['only'=>['destroy']]);
+        $this->middleware('permission:borrar-constructora', ['only' => ['destroy']]);
     }
     /**
-     * Display a listing of the resource.
+     * Display a listing of the resource
      */
-    public function index()
+    public function index(Request $request)
     {
-        $sumaConstructora = Constructora::sum('Costo');
-        $constructoras = Constructora::paginate(5);
+        //filtrador por fechas
+        $fechaInicio = $request->input('fecha_inicio');
+        $fechaFin = $request->input('fecha_fin');
+
+        $query = Constructora::query();
+        if ($fechaInicio && $fechaFin) {
+            $query->whereBetween('created_at', [$fechaInicio, $fechaFin]);
+        }
+
+        // Obtener los resultados filtrados por fecha y si no hay nada mostrar todos las construcciones
+        $constructoras = $query->paginate(5);
+
+        //suma de los registros de los costos
+         $sumaConstructora = $query->sum('Costo');
+
         return view('constructoras.index', compact('constructoras', 'sumaConstructora'));
     }
 

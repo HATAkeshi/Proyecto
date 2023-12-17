@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('constructoras', function (Blueprint $table) {
             $table->id();
+            $table->string('Nro_de_comprobante');
             $table->string('Dueño_de_la_obra');
             $table->string('Direccion_de_la_obra');
             $table->date('Fecha_inicio_de_Obra');

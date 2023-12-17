@@ -22,10 +22,23 @@ class AlquilereController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $sumaAlquileres = Alquilere::sum('Ingresos');
-        $alquileres = Alquilere::paginate(5);
+         //filtrador por fechas
+         $fechaInicio = $request->input('fecha_inicio');
+         $fechaFin = $request->input('fecha_fin');
+ 
+         // Validación de fechas y consulta
+         $query = Alquilere::query();
+         if ($fechaInicio && $fechaFin) {
+             $query->whereBetween('created_at', [$fechaInicio, $fechaFin]);
+         }
+         // Obtener los resultados filtrados por fecha y si no hay nada mostrar todos los cursos
+        $alquileres = $query->paginate(5);
+
+         //suam de todas las tablas
+         $sumaAlquileres = $query->sum('Ingresos');
+
         return view('alquileres.index', compact('alquileres', 'sumaAlquileres'));
     }
 
@@ -48,7 +61,6 @@ class AlquilereController extends Controller
             'Modulos' => 'required|integer',
             'Plataforma' => 'required|integer',
             'Retraso_de_entrega' => 'required|regex:/^[a-zA-Z\s,.()]+$/u',
-            'Nro_de_comprobante' => 'required|integer',
             'Ingresos' => 'required|numeric|regex:/^\d+(\.\d{1,2})?$/'
         ]);
         $input = $request->except(['_token']);
@@ -85,7 +97,6 @@ class AlquilereController extends Controller
             'Modulos' => 'required|integer',
             'Plataforma' => 'required|integer',
             'Retraso_de_entrega' => 'required|regex:/^[a-zA-Z\s,.()]+$/u',
-            'Numero_de_comprobante' => 'required|integer',
             'Ingresos' => 'required|numeric|regex:/^\d+(\.\d{1,2})?$/'
         ]);
         $alquilere->update($request->all());

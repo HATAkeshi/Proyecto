@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('Porcentaje_de_anticipo');
             $table->string('Nombre_de_persona_pago_total');
             $table->string('Detalle_de_curso');
-            $table->integer('Numero_de_comprobante');
+            $table->string('Numero_de_comprobante');
             $table->string('metodo_pago');
             $table->decimal('Ingresos', 10, 2)->default(0.00);
             

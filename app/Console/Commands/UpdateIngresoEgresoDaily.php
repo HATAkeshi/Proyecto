@@ -34,12 +34,12 @@ class UpdateIngresoEgresoDaily extends Command
         $fechaActual = now();
 
         //vemos si ya existe el registro y si es haci lo actualizamos en ves de crear uno nuevo 
-        $registroActual = Ingresoegreso::where('fecha', $fechaActual)->first();
+        $registroActual = Ingresoegreso::whereDate('fecha', $fechaActual)->first();
 
         // Calcula la suma de Cursos y Alquileres
         $sumaCursosActual = Curso::whereDate('created_at', $fechaActual)->sum('Ingresos');
         $sumaAlquileresActual = Alquilere::whereDate('created_at', $fechaActual)->sum('Ingresos');
-        
+
         //egreso
         $sumaGastosActual = Gasto::whereDate('created_at', $fechaActual)->sum('Monto');
 
@@ -49,7 +49,7 @@ class UpdateIngresoEgresoDaily extends Command
         //ingresos
         //suma total de la tala cursos y alquileres y ademas es
         //saldo final del dia
-        $sumaCursosAlquileresAnteriorActual = $sumaCursosActual + $sumaAlquileresActual + $saldoDiaAnterior;
+        $sumaCursosAlquileresAnteriorActual = $sumaCursosActual + $sumaAlquileresActual;
 
         if ($registroActual) {
             //ingreso
@@ -61,7 +61,7 @@ class UpdateIngresoEgresoDaily extends Command
             //guardamos
             $registroActual->save();
         } else {
-            //ingreso
+            /* //ingreso
             $sumaTotal = 0;
             //egreso
             $sumaGasto = 0;
@@ -73,22 +73,21 @@ class UpdateIngresoEgresoDaily extends Command
             $nuevoRegistro->Ingreso = $sumaTotal;
             $nuevoRegistro->Egreso = $sumaGasto;
             $nuevoRegistro->Saldo = $sumaTotal - $sumaGasto;
-            $nuevoRegistro->save();
-        }
+            $nuevoRegistro->save(); */
 
+            
+        }
         // Verifica si existe un registro para el día siguiente
-        $siguienteRegistro = Ingresoegreso::where('fecha', $fechaActual->copy()->addDay()->toDateString())->first();
+        $siguienteRegistro = Ingresoegreso::whereDate('fecha', $fechaActual->copy()->addDay()->toDateString())->first();
 
         if (!$siguienteRegistro) {
             // Crea un nuevo registro para el día siguiente con valores predeterminados
             $nuevoRegistro = new Ingresoegreso();
             $nuevoRegistro->fecha = $fechaActual->copy()->addDay()->toDateString();
-            $nuevoRegistro->Ingreso = 0;
-            $nuevoRegistro->Egreso = 0;
-            $nuevoRegistro->Saldo = 0;
+            $nuevoRegistro->Ingreso = $sumaCursosAlquileresAnteriorActual;
+            $nuevoRegistro->Egreso = $sumaGastosActual;
+            $nuevoRegistro->Saldo = $sumaCursosAlquileresAnteriorActual - $sumaGastosActual;
             $nuevoRegistro->save();
         }
     }
 }
-
-

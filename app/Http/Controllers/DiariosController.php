@@ -47,7 +47,7 @@ class DiariosController extends Controller
 
         // Obtener el valor de IngresosEgresos del día anterior
         //saldo inicial
-        $saldoDiaAnterior = Ingresoegreso::whereDate('fecha', today()->subDay())->value('Ingreso');
+        $saldoDiaAnterior = Ingresoegreso::whereDate('fecha', today()->subDay())->value('Saldo');
 
         // Si hay una fecha filtrada, obtener el registro del día anterior a esa fecha
         if ($fechaIngresada) {
@@ -60,7 +60,7 @@ class DiariosController extends Controller
                 ->first();
         }
         // Obtener el valor del día anterior y si no existe asignarle un cero 
-        $saldoDiaAnterior = $saldoDiaAnterior ? $saldoDiaAnterior->Ingreso : 0;
+        $saldoDiaAnterior = $saldoDiaAnterior ? $saldoDiaAnterior->Saldo : 0;
 
         //suma total de la tala cursos y alquileres y ademas es
         //saldo final del dia

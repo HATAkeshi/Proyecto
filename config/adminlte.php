@@ -388,28 +388,6 @@ return [
                     'url'  => '/ingresoegresos',
                     'icon_color' => 'danger'
                 ],
-                [
-                    'text'    => 'Informe de Cursos',
-                    'url'     => '#',
-                    'icon_color' => 'warning',
-                    'submenu' => [
-                        [
-                            'text' => 'Carpiteria en Aluminio',
-                            'url'  => '#',
-                            'icon' => 'fas fa-solid fa-share fa-flip-vertical'
-                        ],
-                        [
-                            'text'    => 'Sketch Up',
-                            'url'     => '#',
-                            'icon' => 'fas fa-solid fa-share fa-flip-vertical'
-                        ],
-                    ],
-                ],
-                [
-                    'text' => 'Informe de Alquiler de Andamios',
-                    'url'  => '#',
-                    'icon_color' => 'danger'
-                ],
             ]
         ],
     ],

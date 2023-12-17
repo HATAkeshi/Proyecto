@@ -3,7 +3,7 @@
 @section('title', 'Ludeño|Ingresos Egresos')
 
 @section('content_header')
-<div class="card">
+<div class="card bg-dark text-white">
     <div class="card-body">
         <h2>Informes de Ingresos Egresos</h2>
     </div>
@@ -12,40 +12,114 @@
 
 @section('content')
 
-<section>
-    <table class="table table-striped table-hover table-bordered mt-2">
-        <thead class="table-dark">
-            <th style="display: none">ID</th>
-            <th>Fecha</th>
-            <th>Detalle</th>
-            <th>Nombre</th>
-            <th>Ingreso</th>
-            <th>Egreso</th>
-            <th>Saldo</th>
-        </thead>
-        <tbody>
-            @foreach($ingresoegresos as $ingresoegreso)
-            <tr>
-                <td style="display: none">{{$ingresoegreso->id}}</td>
-                <td>{{$ingresoegreso->fecha}}</td>
-                <td>{{$ingresoegreso->Detalle}}</td>
-                <td>{{$ingresoegreso->Nombre}}</td>
-                <td>{{$ingresoegreso->Ingreso}}</td>
-                <td>{{$ingresoegreso->Egreso}}</td>
-                <td>{{$ingresoegreso->Saldo}}</td>
-            </tr>
-            @endforeach
-            <tr style="font-weight: bold;" class="table-active">
-                <td colspan="5" style="text-align:right;">Total</td>
-                <td></td>
-            </tr>
-        </tbody>
-    </table>
+<!-- filtrador por fecha y los botones de interaccion-->
+<section class="container-fluid mt-4">
+    <div class="row justify-content-start">
+        <!-- botones de interccion -->
+        <div class="col-md-4">
+            <div class="card shadow h-100 d-flex">
+                <div class="card-body bg-dark shadow-xl">
+                    <div class="card-title">
+                        <p style="font-weight: bold;">Botones de Interaccion</p>
+                        <hr>
+                    </div>
+                    <div class="card-text">
+                        <div class="row">
+                            <div class="col-auto">
+                                <button type="button" class="btn btn-danger">
+                                    <i class="fas fa-print"></i>
+                                    Imprimir
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- busqueda por fecha -->
+        <div class="col-md-4">
+            <div class="card shadow h-100 d-flex">
+                <div class="card-body bg-dark shadow-xl">
+                    <div class="card-title">
+                        <p style="font-weight: bold;">Busqueda por fecha</p>
+                        <hr>
+                    </div>
+                    <div class="card-text">
+                        <div class="row">
+                            <form method="GET" action="{{ route('ingresoegresos.index') }}">
+                                @csrf
+                                <div class="row mb-3 align-items-center">
+                                    <div class="col-auto">
+                                        <label for="fecha_inicio">Fecha Inicial:</label>
+                                        <input type="date" id="fecha_inicio" name="fecha_inicio" class="form-control">
+                                    </div>
+                                    <div class="col-auto">
+                                        <label for="fecha_inicio">Fecha Final:</label>
+                                        <input type="date" id="fecha_fin" name="fecha_fin" class="form-control">
+                                    </div>
+                                    <div class="col-auto mt-4">
+                                        <button type="submit" class="btn btn-primary">
+                                            <i class="fas fa-search"></i>
+                                            Buscar
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- tabla de Ingresos Egresos Diarios -->
+<section class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <table class="table table-striped table-hover table-bordered mt-2">
+                <thead class="table-dark">
+                    <th style="display: none">ID</th>
+                    <th>Fecha</th>
+                    <th>Detalle</th>
+                    <th>Nombre</th>
+                    <th>Ingreso</th>
+                    <th>Egreso</th>
+                    <th>Saldo</th>
+                </thead>
+                <tbody>
+                    @foreach($ingresoegresos as $ingresoegreso)
+                    <tr>
+                        <td style="display: none">{{$ingresoegreso->id}}</td>
+                        <td>{{$ingresoegreso->fecha}}</td>
+                        <td>{{$ingresoegreso->Detalle}}</td>
+                        <td>{{$ingresoegreso->Nombre}}</td>
+                        <td>{{$ingresoegreso->Ingreso}}</td>
+                        <td>{{$ingresoegreso->Egreso}}</td>
+                        <td>{{$ingresoegreso->Saldo}}</td>
+                    </tr>
+                    @endforeach
+                    <tr style="font-weight: bold;" class="table-active bg-dark">
+                        <td colspan="3" style="text-align:right;">A Total Ingreso</td>
+                        <td>{{$sumaIngresos}}</td>
+                    </tr>
+                    <tr style="font-weight: bold;" class="table-active bg-dark">
+                        <td colspan="4" style="text-align:right;">B Total Egreso</td>
+                        <td>{{$sumaEgresos}}</td>
+                    </tr>
+                    <tr style="font-weight: bold;" class="table-active bg-dark">
+                        <td colspan="5" style="text-align:center;">TOTAL INGRESO NETO A-B</td>
+                        <td>{{$sumaSaldo}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
 </section>
 @stop
 
 @section('css')
 <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
+<link rel="stylesheet" href="{{ asset('css/tablasResposive.css') }}">
 @stop
 
 @section('js')

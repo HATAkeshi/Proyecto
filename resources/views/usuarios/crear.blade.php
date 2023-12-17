@@ -3,7 +3,7 @@
 @section('title', 'Ludeño')
 
 @section('content_header')
-<div class="card">
+<div class="card bg-dark text-white">
     <div class="card-body">
         <h2>Crear Usuario</h2>
     </div>
@@ -26,47 +26,59 @@
 
 <section class="container">
     <section class="row aling-items-center">
-        <div class="col col-md-6">
-
-            <form method="POST" action="{{ route('usuarios.store') }} " class="mx-auto px-4">
-                @csrf
-                <div class="mb-3">
-                    <div class="form-group">
-                        <label class="form-label" for="name">Nombre</label>
-                        <input type="text" name="name" class="form-control" placeholder="Escriba su nombre">
+        <div class="col-xl-6">
+            <div class="card shadow">
+                <div class="card-body bg-light p-0">
+                    <div class="card-title bg-dark text-white p-3 m-0 w-100">
+                        <p class="mb-3" style="font-weight: bold;">
+                            Nuevo Registro
+                        </p>
+                    </div>
+                    <div class="card-text p-3">
+                        <form method="POST" action="{{ route('usuarios.store') }} " class="mx-auto px-4">
+                            @csrf
+                            <div class="mb-3">
+                                <div class="form-group">
+                                    <label class="form-label" for="name">Nombre</label>
+                                    <input type="text" name="name" class="form-control" placeholder="Escriba su nombre">
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <div class="form-group">
+                                    <label class="form-label" for="name">E-mail</label>
+                                    <input type="email" name="email" class="form-control" placeholder="Aqui va su E-mail">
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <div class="form-group">
+                                    <label class="form-label" for="name">Password</label>
+                                    <input type="password" name="password" class="form-control">
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <div class="form-group">
+                                    <label class="form-label" for="name">Confirmar password</label>
+                                    <input type="password" name="confirm-password" class="form-control">
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <div class="form-group">
+                                    <label class="form-label" for="name">Roles</label>
+                                    {!! Form::select('roles[]', $roles,[], array('class'=> 'form-control')) !!}
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <button type="submit" class="btn btn-primary">Guardar</button>
+                            </div>
+                        </form>
                     </div>
                 </div>
-                <div class="mb-3">
-                    <div class="form-group">
-                        <label class="form-label" for="name">E-mail</label>
-                        <input type="email" name="email" class="form-control" placeholder="Aqui va su E-mail">
-                    </div>
-                </div>
-                <div class="mb-3">
-                    <div class="form-group">
-                        <label class="form-label" for="name">Password</label>
-                        <input type="password" name="password" class="form-control">
-                    </div>
-                </div>
-                <div class="mb-3">
-                    <div class="form-group">
-                        <label class="form-label" for="name">Confirmar password</label>
-                        <input type="password" name="confirm-password" class="form-control">
-                    </div>
-                </div>
-                <div class="mb-3">
-                    <div class="form-group">
-                        <label class="form-label" for="name">Roles</label>
-                        {!! Form::select('roles[]', $roles,[], array('class'=> 'form-control')) !!}
-                    </div>
-                </div>
-                <div class="mb-3">
-                    <button type="submit" class="btn btn-primary">Guardar</button>
-                </div>
-            </form>
-
+            </div>
         </div>
-        <div class="col col-md-6 bg d-none d-sm-block"></div>
+        <!-- imagen  -->
+        <div class="col-xl-6 d-none d-xl-block">
+            <img src="{{ asset('imagenesApoyo/user.jpg') }}" style="width: 80%;">
+        </div>
     </section>
 </section>
 
@@ -74,16 +86,6 @@
 
 @section('css')
 <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
-<!-- Dentro de tu archivo Blade -->
-<style>
-    .bg {
-        background-image: url('{{ asset("imagenesApoyo/user.jpg") }}');
-        background-position: center center;
-        background-repeat: no-repeat;
-        background-size: 50%;
-    }
-</style>
-
 @stop
 
 @section('js')

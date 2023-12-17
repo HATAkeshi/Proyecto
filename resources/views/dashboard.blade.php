@@ -3,7 +3,7 @@
 @section('title', 'Ludeño')
 
 @section('content_header')
-<div class="card">
+<div class="card bg-dark text-white">
     <div class="card-body">
         <h2>Grafica de Ingresos Egresos por mes y año</h2>
     </div>

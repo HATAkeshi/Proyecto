@@ -1,0 +1,1 @@
+<!-- no hay codigo aun por que no esty seguro que se pueda crear un nuevo registro para eso tenemos el formulario cursos -->

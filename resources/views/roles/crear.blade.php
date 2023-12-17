@@ -3,7 +3,7 @@
 @section('title', 'Ludeño')
 
 @section('content_header')
-<div class="card">
+<div class="card bg-dark text-white">
     <div class="card-body">
         <h2>Crear Rol</h2>
     </div>
@@ -26,36 +26,48 @@
 
 <section class="container">
     <section class="row aling-items-center">
-        <div class="col col-md-6">
-
-            <form method="POST" action="{{ route('roles.store') }} " class="mx-auto px-4">
-                @csrf
-                <div class="mb-3">
-                    <div class="form-group">
-                        <label class="form-label" for="name">Nombre del Rol</label>
-                        <input type="text" name="name" class="form-control">
+        <div class="col-xl-6">
+            <div class="card shadow">
+                <div class="card-body bg-light p-0">
+                    <div class="card-title bg-dark text-white p-3 m-0 w-100">
+                        <p class="mb-3" style="font-weight: bold;">
+                            Crear Registro
+                        </p>
+                    </div>
+                    <div class="card-text p-3">
+                        <form method="POST" action="{{ route('roles.store') }} " class="mx-auto px-4">
+                            @csrf
+                            <div class="mb-3">
+                                <div class="form-group">
+                                    <label class="form-label" for="name">Nombre del Rol</label>
+                                    <input type="text" name="name" class="form-control">
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <div class="form-group">
+                                    <label class="form-label" for="name">Permisos para este Rol: </label>
+                                    <br />
+                                    @foreach ($permission as $value)
+                                    <label class="form-check-label ml-5" style="font-weight: bold;">
+                                        {{ Form::checkbox('permission[]', $value->id, false, array('class' => 'name form-check-input')) }}
+                                        {{ $value->name }}
+                                    </label>
+                                    <br />
+                                    @endforeach
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <button type="submit" class="btn btn-primary">Guardar</button>
+                            </div>
+                        </form>
                     </div>
                 </div>
-                <div class="mb-3">
-                    <div class="form-group">
-                        <label class="form-label" for="name">Permisos para este Rol: </label>
-                        <br />
-                        @foreach ($permission as $value)
-                        <label class="form-check-label ml-5" style="font-weight: bold;">
-                            {{ Form::checkbox('permission[]', $value->id, false, array('class' => 'name form-check-input')) }}
-                            {{ $value->name }}
-                        </label>
-                        <br />
-                        @endforeach
-                    </div>
-                </div>
-                <div class="mb-3">
-                    <button type="submit" class="btn btn-primary">Guardar</button>
-                </div>
-            </form>
-            
+            </div>
         </div>
-        <div class="col col-md-6 bg d-none d-sm-block"></div>
+        <!-- imagen  -->
+        <div class="col-xl-6 d-none d-xl-block">
+            <img src="{{ asset('imagenesApoyo/roles-crear.png') }}" style="width: 80%;">
+        </div>
     </section>
 </section>
 
@@ -63,15 +75,6 @@
 
 @section('css')
 <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
-<!-- Dentro de tu archivo Blade -->
-<style>
-    .bg {
-        background-image: url('{{ asset("imagenesApoyo/roles-crear.png") }}');
-        background-position: center center;
-        background-repeat: no-repeat;
-        background-size: 50%;
-    }
-</style>
 @stop
 
 @section('js')

@@ -15,4 +15,16 @@ class Curso extends Model
     {
         return $this->hasMany(Deposito::class, 'curso_id');
     }
+
+    //para la creacion automatica de las facturas 
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($curso) {
+            $lastId = static::max('id') ?? 0; // Obtener el último ID en la tabla (o cero si no hay registros)
+            $newId = $lastId + 1; // Incrementar el ID
+            $curso->Numero_de_comprobante = 'CCS-' . str_pad($newId, 4, '0', STR_PAD_LEFT);
+        });
+    }
 }

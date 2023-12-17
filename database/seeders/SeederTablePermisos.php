@@ -43,7 +43,6 @@ class SeederTablePermisos extends Seeder
             'borrar-cursos',
             //tabla de depositos
             'ver-depositos',
-            'crear-depositos',
             'editar-depositos',
             'borrar-depositos',
             //tabla de gastos

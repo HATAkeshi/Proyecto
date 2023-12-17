@@ -12,8 +12,11 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule): void
     {
-        $schedule->command('app:update-ingreso-egreso-daily')
-        ->dailyAt('23:59'); // Ejecutar justo antes de medianoche
+        //activar si es que el servidor permite comandos artisan 
+        //su coomand se llama UpdateIngresoEgresoDaily
+        
+        /* $schedule->command('app:update-ingreso-egreso-daily')
+        ->dailyAt('23:59'); // Ejecutar justo antes de medianoche */
     }
 
     /**

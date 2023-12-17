@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('Modulos');
             $table->string('Plataforma');
             $table->text('Retraso_de_entrega');
-            $table->integer('Nro_de_comprobante')->default(0.00);
+            $table->string('Nro_de_comprobante');
             $table->decimal('Ingresos', 10, 2)->default(0.00);
             $table->timestamps();
         });

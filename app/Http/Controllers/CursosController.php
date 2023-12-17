@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use App\Models\Curso;
 use App\Models\Deposito;
 use Illuminate\Support\Facades\Validator;
+//fechas
+use Carbon\Carbon;
 
 class CursosController extends Controller
 {
@@ -24,10 +26,23 @@ class CursosController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $sumaCursos = Curso::sum('Ingresos');
-        $cursos = Curso::paginate(5);
+        //filtrador por fechas
+        $fechaInicio = $request->input('fecha_inicio');
+        $fechaFin = $request->input('fecha_fin');
+
+        // Validación de fechas y consulta
+        $query = Curso::query();
+        if ($fechaInicio && $fechaFin) {
+            $query->whereBetween('created_at', [$fechaInicio, $fechaFin]);
+        }
+        // Obtener los resultados filtrados por fecha y si no hay nada mostrar todos los cursos
+        $cursos = $query->paginate(5);
+
+        // Suma de todos los ingresos de cursos
+        $sumaCursos = $query->sum('Ingresos');
+
         return view('cursos.index', compact('cursos', 'sumaCursos'));
     }
 
@@ -49,11 +64,9 @@ class CursosController extends Controller
             'Porcentaje_de_anticipo' => 'required|numeric',
             'Nombre_de_persona_pago_total' => 'required|regex:/^[a-zA-Z\s]+$/u',
             'Detalle_de_curso' => 'required|in:Carpiteria en Aluminio,Scketch Up - V-Ray,Manejo de Redes',
-            'Numero_de_comprobante' => 'required|integer',
             'Ingresos' => 'required|numeric|regex:/^\d+(\.\d{1,2})?$/',
             //para depositos 
             'Nro_de_transaccion' => $request->metodo_pago === 'deposito' ? 'required|integer' : '',
-            'Nombre' => $request->metodo_pago === 'deposito' ? 'required|regex:/^[a-zA-Z\s]+$/u' : '',
             'Monto' => $request->metodo_pago === 'deposito' ? 'required|regex:/^\d+(\.\d{1,2})?$/' : '',
         ]);
 
@@ -61,7 +74,11 @@ class CursosController extends Controller
             // Crear un nuevo depósito
             $deposito = new Deposito();
             $deposito->Nro_de_transaccion = $request->Nro_de_transaccion;
-            $deposito->Nombre = $request->Nombre;
+
+            // Obtener el nombre de la persona del curso
+            $nombrePersonaCurso = $request->input('Nombre_de_persona_pago_total');
+            $deposito->Nombre = $nombrePersonaCurso;
+
             $deposito->Monto = $request->Monto;
 
             // Guardar el depósito asociado al curso
@@ -104,11 +121,9 @@ class CursosController extends Controller
             'Porcentaje_de_anticipo' => 'required|integer',
             'Nombre_de_persona_pago_total' => 'required|regex:/^[a-zA-Z\s]+$/u',
             'Detalle_de_curso' => 'required|in:Carpiteria en Aluminio,Scketch Up - V-Ray,Manejo de Redes',
-            'Numero_de_comprobante' => 'required|integer',
             'Ingresos' => 'required|numeric|regex:/^\d+(\.\d{1,2})?$/',
             //para depositos 
             'Nro_de_transaccion' => $request->metodo_pago === 'deposito' ? 'required|integer' : '',
-            'Nombre' => $request->metodo_pago === 'deposito' ? 'required|regex:/^[a-zA-Z\s]+$/u' : '',
             'Monto' => $request->metodo_pago === 'deposito' ? 'required|numeric|regex:/^\d+(\.\d{1,2})?$/' : '',
         ]);
 
@@ -116,9 +131,10 @@ class CursosController extends Controller
             return $input->metodo_pago === 'deposito';
         });
 
-        $validator->sometimes('Nombre', 'required', function ($input) {
+        //eliminio la validacion para el campo nombre
+        /* $validator->sometimes('Nombre', 'required', function ($input) {
             return $input->metodo_pago === 'deposito';
-        });
+        }); */
 
         $validator->sometimes('Monto', 'required', function ($input) {
             return $input->metodo_pago === 'deposito';
@@ -137,18 +153,23 @@ class CursosController extends Controller
         if ($request->metodo_pago === 'deposito') {
             $deposito = $curso->depositos()->first();
 
+            // Obtener el nombre del curso y asignarlo al campo 'Nombre' del depósito
+            $nombreCurso= $curso->Nombre_de_persona_pago_total;
+
             // Verificar si se encontró un depósito y hay cambios en los datos de depósito
-            if ($deposito && ($request->Nro_de_transaccion || $request->Nombre || $request->Monto)) {
+            if ($deposito && ($request->Nro_de_transaccion || /* $request->Nombre || */ $request->Monto)) {
                 $deposito->update([
                     'Nro_de_transaccion' => $request->Nro_de_transaccion,
-                    'Nombre' => $request->Nombre,
+                    /* 'Nombre' => $request->Nombre, */  //se debe de cambiar
+                    'Nombre' => $nombreCurso,
                     'Monto' => $request->Monto,
                 ]);
-            } elseif (!$deposito && ($request->Nro_de_transaccion || $request->Nombre || $request->Monto)) {
+            } elseif (!$deposito && ($request->Nro_de_transaccion || /* $request->Nombre || */ $request->Monto)) {
                 // Si no se encontró un depósito y se proporcionan datos para crear uno nuevo
                 $curso->depositos()->create([
                     'Nro_de_transaccion' => $request->Nro_de_transaccion,
-                    'Nombre' => $request->Nombre,
+                    /* 'Nombre' => $request->Nombre, */  //se debe de cambiar
+                    'Nombre' => $nombreCurso,
                     'Monto' => $request->Monto,
                 ]);
             }

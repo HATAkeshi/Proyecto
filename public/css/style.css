@@ -1,7 +1,10 @@
-/* El estilo CSS para el contenedor div */
-.form-group {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 10px;
-  }
+#mitad-color {
+  background-color: #3498db; /* Color deseado para la mitad */
+  height: 100vh; /* Toda la altura de la pantalla */
+  width: 50%; /* La mitad del ancho de la pantalla */
+  position: fixed;
+  top: 0;
+  left: 0;
+}
+
   
