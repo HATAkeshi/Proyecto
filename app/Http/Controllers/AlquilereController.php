@@ -34,7 +34,7 @@ class AlquilereController extends Controller
              $query->whereBetween('created_at', [$fechaInicio, $fechaFin]);
          }
          // Obtener los resultados filtrados por fecha y si no hay nada mostrar todos los cursos
-        $alquileres = $query->paginate(5);
+        $alquileres = $query->orderBy('created_at', 'desc')->paginate(5);
 
          //suam de todas las tablas
          $sumaAlquileres = $query->sum('Ingresos');
@@ -57,10 +57,10 @@ class AlquilereController extends Controller
     {
         request()->validate([
             'Nombre_de_persona_o_empresa' => 'required|regex:/^[a-zA-Z\s]+$/u',
-            'Detalle' => 'required|regex:/^[a-zA-Z\s,.()]+$/u',
+            'Detalle' => 'nullable|regex:/^[a-zA-Z0-9\s,.()]+$/u',
             'Modulos' => 'required|integer',
             'Plataforma' => 'required|integer',
-            'Retraso_de_entrega' => 'required|regex:/^[a-zA-Z\s,.()]+$/u',
+            'Retraso_de_entrega' => 'nullable|regex:/^[a-zA-Z0-9\s,.()]+$/u',
             'Ingresos' => 'required|numeric|regex:/^\d+(\.\d{1,2})?$/'
         ]);
         $input = $request->except(['_token']);

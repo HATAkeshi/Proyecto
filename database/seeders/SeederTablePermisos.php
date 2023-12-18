@@ -44,7 +44,7 @@ class SeederTablePermisos extends Seeder
             //tabla de depositos
             'ver-depositos',
             'editar-depositos',
-            'borrar-depositos',
+            //'borrar-depositos',
             //tabla de gastos
             'ver-gastos',
             'crear-gastos',
@@ -52,6 +52,8 @@ class SeederTablePermisos extends Seeder
             'borrar-gastos',
             //tabla de corte
             'editar-corte',
+            //tabla de Ingresos Egresos
+            'ver-Ingresos-Egresos',
         ];
         foreach($permisos as $permiso){
             Permission::create(['name'=>$permiso]);

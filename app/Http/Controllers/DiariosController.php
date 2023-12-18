@@ -70,10 +70,10 @@ class DiariosController extends Controller
         $sumaDepGasRecActual = $sumaDepositosActual + $sumaGastosActual + $sumaRecorte;
 
         //para mostrar las tablas que se crearon en el dia 
-        $alquileres = Alquilere::whereDate('created_at', $fechaActual)->get();
-        $cursos = Curso::whereDate('created_at', $fechaActual)->get();
-        $depositos = Deposito::whereDate('created_at', $fechaActual)->get();
-        $gastos = Gasto::whereDate('created_at', $fechaActual)->get();
+        $alquileres = Alquilere::whereDate('created_at', $fechaActual)->latest()->get();
+        $cursos = Curso::whereDate('created_at', $fechaActual)->latest()->get();
+        $depositos = Deposito::whereDate('created_at', $fechaActual)->latest()->get();
+        $gastos = Gasto::whereDate('created_at', $fechaActual)->latest()->get();
 
         return view('diarios.index', compact('diarios', 'saldoDiaAnterior', 'sumaCursosAlquileresAnteriorActual', 'fechaActual', 'sumaAlquileresActual',  'sumaCursosActual', 'sumaDepositosActual', 'sumaGastosActual', 'sumaDepGasRecActual', 'sumaRecorte'))->with([
             'ultimoRegistro' => $ultimoRegistro,

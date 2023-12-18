@@ -30,8 +30,8 @@
             <div class="card shadow">
                 <div class="card-body bg-light p-0">
                     <div class="card-title bg-dark text-white p-3 m-0 w-100">
-                        <p class="mb-3">
-                            Nuevo Alquiler
+                        <p class="mb-3" style="font-weight: bold;">
+                            Nuevo Registro
                         </p>
                     </div>
                     <div class="card-text p-3">
@@ -52,13 +52,7 @@
                             <div class="mb-3">
                                 <div class="form-group">
                                     <label class="form-label">Detalle</label>
-                                    <textarea class="form-control " id="validationTextarea" name="Detalle" placeholder="" required></textarea>
-                                </div>
-                                <div class="valid-feedback">
-                                    Todo bien c:!
-                                </div>
-                                <div class="invalid-feedback">
-                                    Este campo es nesesario
+                                    <textarea class="form-control " id="validationTextarea" name="Detalle" placeholder=""></textarea>
                                 </div>
                             </div>
                             <div class="mb-3">
@@ -88,13 +82,7 @@
                             <div class="mb-3">
                                 <div class="form-group">
                                     <label class="form-label">Retraso de entrega</label>
-                                    <textarea class="form-control" id="validationTextarea" name="Retraso_de_entrega" placeholder="Resumen del porque" required></textarea>
-                                </div>
-                                <div class="valid-feedback">
-                                    Todo bien c:!
-                                </div>
-                                <div class="invalid-feedback">
-                                    Este campo es nesesario
+                                    <textarea class="form-control" id="validationTextarea" name="Retraso_de_entrega" placeholder="Resumen del porque"></textarea>
                                 </div>
                             </div>
                             <div class="mb-3">

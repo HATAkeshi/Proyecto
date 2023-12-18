@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::create('ingresoegresos', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
-            $table->string('Detalle')->nullable()->default('Reporte');;
-            $table->string('Nombre')->nullable()->default('-');;
+            $table->string('Detalle')->nullable()->default('Reporte');
+            $table->string('Nombre')->nullable()->default('-');
             $table->integer('Ingreso');
             $table->integer('Egreso');
             $table->integer('Saldo');

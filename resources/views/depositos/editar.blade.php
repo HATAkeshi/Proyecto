@@ -84,7 +84,7 @@
         </div>
         <!-- imagen  -->
         <div class="col-xl-6 d-none d-xl-block">
-            <img src="{{ asset('imagenesApoyo/editar-depositos.png') }}" style="width: 100%;">
+            <img src="{{ asset('imagenesApoyo/editar-depositos.png') }}" style="width: 80%;">
         </div>
     </section>
 </section>

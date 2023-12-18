@@ -34,7 +34,7 @@ class GastosController extends Controller
             $query->whereBetween('created_at', [$fechaInicio, $fechaFin]);
         }
         // Obtener los resultados filtrados por fecha y si no hay nada mostrar todos los gastos
-        $gastos = $query->paginate(5);
+        $gastos = $query->orderBy('created_at', 'desc')->paginate(5);
         
         //suma de todos los gastos
         $sumaGastos = $query->sum('Monto');

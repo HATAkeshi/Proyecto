@@ -33,7 +33,7 @@ class ConstructorasController extends Controller
         }
 
         // Obtener los resultados filtrados por fecha y si no hay nada mostrar todos las construcciones
-        $constructoras = $query->paginate(5);
+        $constructoras = $query->orderBy('created_at', 'desc')->paginate(5);
 
         //suma de los registros de los costos
          $sumaConstructora = $query->sum('Costo');

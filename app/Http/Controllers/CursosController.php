@@ -38,7 +38,7 @@ class CursosController extends Controller
             $query->whereBetween('created_at', [$fechaInicio, $fechaFin]);
         }
         // Obtener los resultados filtrados por fecha y si no hay nada mostrar todos los cursos
-        $cursos = $query->paginate(5);
+        $cursos = $query->orderBy('created_at', 'desc')->paginate(5);
 
         // Suma de todos los ingresos de cursos
         $sumaCursos = $query->sum('Ingresos');

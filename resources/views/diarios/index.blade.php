@@ -157,7 +157,7 @@
                     </tr>
                     @endforeach
                     <tr style="font-weight: bold;" class="table-active">
-                        <td colspan="6" style="text-align:right;">Total</td>
+                        <td colspan="7" style="text-align:right;">Total</td>
                         <td>{{ $sumaAlquileresActual }}</td>
                     </tr>
                 </tbody>
@@ -209,7 +209,7 @@
                     </tr>
                     @endforeach
                     <tr style="font-weight: bold;" class="table-active">
-                        <td colspan="5" style="text-align:right;">Total</td>
+                        <td colspan="6" style="text-align:right;">Total</td>
                         <td>{{ $sumaCursosActual }}</td>
                     </tr>
                 </tbody>
@@ -374,7 +374,7 @@
                     </tr>
                     @endforeach
                     <tr style="font-weight: bold;" class="table-active">
-                        <td colspan="2" style="text-align:right;">Total</td>
+                        <td colspan="3" style="text-align:right;">Total</td>
                         <td>{{ $sumaDepositosActual }}</td>
                     </tr>
                 </tbody>
@@ -422,7 +422,7 @@
                     </tr>
                     @endforeach
                     <tr style="font-weight: bold;" class="table-active">
-                        <td colspan="4" style="text-align:right;">Total</td>
+                        <td colspan="5" style="text-align:right;">Total</td>
                         <td>{{ $sumaGastosActual }}</td>
                     </tr>
                 </tbody>

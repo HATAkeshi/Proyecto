@@ -12,6 +12,10 @@ use Carbon\Carbon;
 
 class IngresoegresoController extends Controller
 {
+    function __construct()
+    {
+        $this->middleware('permission:ver-Ingresos-Egresos')->only('index');
+    }
     /**
      * Display a listing of the resource.
      */
@@ -27,7 +31,7 @@ class IngresoegresoController extends Controller
             $query->whereBetween('created_at', [$fechaInicio, $fechaFin]);
         }
         // Obtener los resultados filtrados por fecha y si no hay nada mostrar todos los cursos
-       $ingresoegresos = $query->paginate(5);
+       $ingresoegresos = $query->orderBy('created_at', 'desc')->paginate(5);
 
         //suma del campo ingreso
         $sumaIngresos = $query->sum('Ingreso');

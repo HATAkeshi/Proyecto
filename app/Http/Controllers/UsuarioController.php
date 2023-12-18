@@ -14,6 +14,10 @@ use Illuminate\Support\Arr;
 
 class UsuarioController extends Controller
 {
+    function __construct()
+    {
+        $this->middleware('permission:ver-usuario')->only('index');
+    }
     /**
      * Display a listing of the resource.
      */

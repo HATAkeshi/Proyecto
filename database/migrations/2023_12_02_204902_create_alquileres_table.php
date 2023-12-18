@@ -14,10 +14,10 @@ return new class extends Migration
         Schema::create('alquileres', function (Blueprint $table) {
             $table->id();
             $table->string('Nombre_de_persona_o_empresa');
-            $table->text('Detalle');
+            $table->text('Detalle')->nullable();
             $table->string('Modulos');
             $table->string('Plataforma');
-            $table->text('Retraso_de_entrega');
+            $table->text('Retraso_de_entrega')->nullable();
             $table->string('Nro_de_comprobante');
             $table->decimal('Ingresos', 10, 2)->default(0.00);
             $table->timestamps();
