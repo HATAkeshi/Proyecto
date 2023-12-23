@@ -20,10 +20,14 @@ class Constructora extends Model
     {
         parent::boot();
 
-        static::creating(function ($constructora) {
-            $lastId = static::max('id') ?? 0; // Obtener el último ID en la tabla (o cero si no hay registros)
-            $newId = $lastId + 1; // Incrementar el ID
-            $constructora->Nro_de_comprobante = 'CL-' . str_pad($newId, 4, '0', STR_PAD_LEFT);
+        static::created(function ($constructora) {
+            $constructora->Nro_de_comprobante = 'CL-' . str_pad($constructora->id, 4, '0', STR_PAD_LEFT);
+            $constructora->save();
+        });
+        static::saving(function ($constructora) {
+            if (!$constructora->Nro_de_comprobante) {
+                $constructora->Nro_de_comprobante = 'CL-' . str_pad($constructora->id, 5, '0', STR_PAD_LEFT);
+            }
         });
     }
 }

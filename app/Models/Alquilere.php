@@ -20,10 +20,14 @@ class Alquilere extends Model
     {
         parent::boot();
 
-        static::creating(function ($alquilere) {
-            $lastId = static::max('id') ?? 0; // Obtener el último ID en la tabla (o cero si no hay registros)
-            $newId = $lastId + 1; // Incrementar el ID
-            $alquilere->Nro_de_comprobante = 'AA-' . str_pad($newId, 5, '0', STR_PAD_LEFT);
+        static::created(function ($alquilere) {
+            $alquilere->Nro_de_comprobante = 'AA-' . str_pad($alquilere->id, 4, '0', STR_PAD_LEFT);
+            $alquilere->save();
+        });
+        static::saving(function ($alquilere) {
+            if (!$alquilere->Nro_de_comprobante) {
+                $alquilere->Nro_de_comprobante = 'AA-' . str_pad($alquilere->id, 5, '0', STR_PAD_LEFT);
+            }
         });
     }
 }

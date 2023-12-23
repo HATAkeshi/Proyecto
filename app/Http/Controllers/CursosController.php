@@ -22,6 +22,43 @@ class CursosController extends Controller
         $this->middleware('permission:editar-cursos', ['only' => ['edit', 'update']]);
         //borrar
         $this->middleware('permission:borrar-cursos', ['only' => ['destroy']]);
+        //ver eliminados
+        $this->middleware('permission:ver-eliminados')->only('eliminadosCursos');
+        //restaurar eliminados
+        $this->middleware('permission:restaurar-eliminados', ['only' => ['restore']]);
+    }
+    //controlador para ver los cursos eliminados
+    public function eliminadosCursos()
+    {
+        $registrosEliminados = Curso::onlyTrashed()->get();
+        return view('cursos.eliminado', compact('registrosEliminados'));
+    }
+    //metodo para restaurar los cursos eliminados
+    public function restore($id)
+    {
+        // Encuentra el curso eliminado por su ID
+        $curso = Curso::withTrashed()->findOrFail($id);
+
+        if ($curso) {
+            // Verificar si el curso tiene un depósito eliminado
+            $deposito = Deposito::onlyTrashed()->where('curso_id', $curso->id)->first();
+
+            // Restaurar el depósito asociado, si existe
+            if ($deposito) {
+                $deposito->restore();
+            }
+
+            // Restaurar el curso
+            $curso->restore();
+
+            return redirect()->back()->with('success', 'Curso restaurado exitosamente.');
+        }
+
+        // Restaura el curso
+        $curso->restore();
+
+        // Redirecciona a la vista de registros eliminados
+        return redirect()->route('eliminados-cursos')->with('success', 'Curso restaurado exitosamente.');
     }
     /**
      * Display a listing of the resource.
@@ -32,16 +69,24 @@ class CursosController extends Controller
         $fechaInicio = $request->input('fecha_inicio');
         $fechaFin = $request->input('fecha_fin');
 
+        //ordenamiento por desendente y acendenete
+        $orden = $request->input('orden', 'desc');
+
         // Validación de fechas y consulta
         $query = Curso::query();
-        if ($fechaInicio && $fechaFin) {
-            $query->whereBetween('created_at', [$fechaInicio, $fechaFin]);
+        //filtramos las fechas en un rango donde se toma en cuenat el inicio y el fin 
+        if ($fechaInicio !== null && $fechaFin !== null) {
+            $query->where(function ($query) use ($fechaInicio, $fechaFin) {
+                $query->whereDate('created_at', '>=', $fechaInicio)
+                    ->whereDate('created_at', '<=', $fechaFin);
+            });
         }
-        // Obtener los resultados filtrados por fecha y si no hay nada mostrar todos los cursos
-        $cursos = $query->orderBy('created_at', 'desc')->paginate(5);
 
         // Suma de todos los ingresos de cursos
         $sumaCursos = $query->sum('Ingresos');
+
+        // Obtener los resultados filtrados por fecha y si no hay nada mostrar todos los cursos
+        $cursos = $query->orderBy('created_at', $orden)->paginate(10);
 
         return view('cursos.index', compact('cursos', 'sumaCursos'));
     }
@@ -154,7 +199,7 @@ class CursosController extends Controller
             $deposito = $curso->depositos()->first();
 
             // Obtener el nombre del curso y asignarlo al campo 'Nombre' del depósito
-            $nombreCurso= $curso->Nombre_de_persona_pago_total;
+            $nombreCurso = $curso->Nombre_de_persona_pago_total;
 
             // Verificar si se encontró un depósito y hay cambios en los datos de depósito
             if ($deposito && ($request->Nro_de_transaccion || /* $request->Nombre || */ $request->Monto)) {

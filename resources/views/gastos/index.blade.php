@@ -27,17 +27,42 @@
                         <div class="row">
                             <div class="col-auto">
                                 @can('crear-gastos')
-                                <a class="btn btn-warning" href="{{ route('gastos.create') }}">
+                                <a class="btn btn-warning mt-1" href="{{ route('gastos.create') }}">
                                     <i class="fas fa-plus"></i>
                                     Nuevo
                                 </a>
                                 @endcan
                             </div>
                             <div class="col-auto">
-                                <button type="button" class="btn btn-danger">
+                                <button type="button" class="btn btn-danger mt-1">
                                     <i class="fas fa-print"></i>
                                     Imprimir
                                 </button>
+                            </div>
+                            <div class="col-auto">
+                                <form action="{{ route('gastos.index') }}" method="GET" id="ordenarForm">
+                                    <div class="row mb-3 align-items-center">
+                                        <div class="col-auto">
+                                            <select class="form-select mt-1" name="orden" id="ordenSelect">
+                                                <option value="desc" {{ request('orden') == 'desc' ? 'selected' : '' }}>Descendente</option>
+                                                <option value="asc" {{ request('orden') == 'asc' ? 'selected' : '' }}>Ascendente</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-auto">
+                                            <button class="btn btn-success mt-1" type="submit" id="ordenarButtonFechaRango">
+                                                <i class="fas fa-sort-alpha-down fa-lg"></i>
+                                                Ordenar
+                                            </button>
+                                            <br>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="col-auto">
+                                <a href="{{ route('eliminados-gasto') }}" type="button" class="btn btn-danger m-1">
+                                    <i class="fas fa-eye"></i>
+                                    Ver eliminados
+                                </a>
                             </div>
                         </div>
                     </div>
@@ -106,7 +131,7 @@
                         <td>{{$gasto->Nro_de_comprobante}}</td>
                         <td>{{$gasto->Monto}}</td>
                         <td>
-                            <form action="{{ route('gastos.destroy', $gasto->id) }}" method="post">
+                            <form class="deleteForm" action="{{ route('gastos.destroy', $gasto->id) }}" method="post">
                                 @can('editar-gastos')
                                 <a href="{{ route('gastos.edit', $gasto->id) }}" class="btn btn-primary">
                                     <i class="fas fa-pen"></i>
@@ -117,7 +142,7 @@
                                 @csrf
                                 @method('DELETE')
                                 @can('borrar-gastos')
-                                <button type="submit" class="btn btn-danger">
+                                <button type="submit" class="btn btn-danger" onclick="confirmarEliminacion('deleteForm')">
                                     <i class="fas fa-trash"></i>
                                     Borrar
                                 </button>
@@ -148,6 +173,9 @@
 
 @section('js')
 <script src="{{ asset('js/bootstrap.bundle.min.js') }}"></script>
+<script src="{{ asset('js/sweetalert2.all.min.js') }}"></script>
+<script src="{{ asset('js/confirmarEliminacion.js') }}"></script>
+<script src="{{ asset('js/FiltracionesOrdenamientoRangos.js') }}"></script>
 <script>
     console.log('Hola');
 </script>

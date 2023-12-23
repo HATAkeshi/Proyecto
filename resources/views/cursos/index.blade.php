@@ -24,20 +24,45 @@
                         <hr>
                     </div>
                     <div class="card-text">
-                        <div class="row">
+                        <div class="row align-items mt-2">
                             <div class="col-auto">
                                 @can('crear-cursos')
-                                <a class="btn btn-warning" href="{{ route('cursos.create') }}">
+                                <a class="btn btn-warning mt-1" href="{{ route('cursos.create') }}">
                                     <i class="fas fa-plus"></i>
                                     Nuevo
                                 </a>
                                 @endcan
                             </div>
                             <div class="col-auto">
-                                <button type="button" class="btn btn-danger">
+                                <button type="button" class="btn btn-danger m-1">
                                     <i class="fas fa-print"></i>
                                     Imprimir
                                 </button>
+                            </div>
+                            <div class="col-auto">
+                                <form action="{{ route('cursos.index') }}" method="GET" id="ordenarForm">
+                                    <div class="row mb-3 align-items-center">
+                                        <div class="col-auto">
+                                            <select class="form-select mt-1" name="orden" id="ordenSelect">
+                                                <option value="desc" {{ request('orden') == 'desc' ? 'selected' : '' }}>Descendente</option>
+                                                <option value="asc" {{ request('orden') == 'asc' ? 'selected' : '' }}>Ascendente</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-auto">
+                                            <button class="btn btn-success mt-1" type="submit" id="ordenarButtonFechaRango">
+                                                <i class="fas fa-sort-alpha-down fa-lg"></i>
+                                                Ordenar
+                                            </button>
+                                            <br>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="col-auto">
+                                <a href="{{ route('eliminados-cursos') }}" type="button" class="btn btn-danger m-1">
+                                    <i class="fas fa-eye"></i>
+                                    Ver eliminados
+                                </a>
                             </div>
                         </div>
                     </div>
@@ -83,7 +108,7 @@
 <!-- tabla de cursos -->
 <section class="container-fluid">
     <div class="row">
-        <div class="col-md-12">
+        <div class="col-xl-12">
             <table class="table table-striped table-hover table-bordered mt-2">
                 <thead class="table-dark">
                     <th style="display: none">ID</th>
@@ -110,7 +135,7 @@
                         <td>{{$curso->Ingresos}}</td>
                         <td>{{$curso->metodo_pago}}</td>
                         <td>
-                            <form action="{{ route('cursos.destroy', $curso->id) }}" method="POST">
+                            <form class="deleteForm" action="{{ route('cursos.destroy', $curso->id) }}" method="POST">
                                 @can('editar-cursos')
                                 <a href="{{ route('cursos.edit', $curso->id) }}" class="btn btn-primary">
                                     <i class="fas fa-pen"></i>
@@ -121,7 +146,7 @@
                                 @csrf
                                 @method('DELETE')
                                 @can('borrar-cursos')
-                                <button type="submit" class="btn btn-danger">
+                                <button type="submit" class="btn btn-danger" onclick="confirmarEliminacion('deleteForm')">
                                     <i class="fas fa-trash"></i>
                                     Borrar
                                 </button>
@@ -140,7 +165,7 @@
     </div>
 </section>
 <!-- paginacion -->
-<div class="pagination justify-content-end">
+<div class="pagination justify-content-center">
     {!! $cursos->links() !!}
 </div>
 @stop
@@ -153,6 +178,9 @@
 
 @section('js')
 <script src="{{ asset('js/bootstrap.bundle.min.js') }}"></script>
+<script src="{{ asset('js/sweetalert2.all.min.js') }}"></script>
+<script src="{{ asset('js/confirmarEliminacion.js') }}"></script>
+<script src="{{ asset('js/FiltracionesOrdenamientoRangos.js') }}"></script>
 <script>
     console.log('Hola');
 </script>

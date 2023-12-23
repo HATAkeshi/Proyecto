@@ -16,28 +16,53 @@
 <section class="container-fluid mt-4">
     <div class="row ">
         <div class="col-md-4">
-            <div class="card shadow h-100 d-flex">
+            <div class="card shadow h-100">
                 <div class="card-body bg-dark shadow-xl">
                     <div class="card-title">
-                        <p>Busqueda por fecha</p>
+                        <p style="font-weight: bold;">Busqueda por fecha</p>
                         <hr>
                     </div>
                     <div class="card-text">
-                        <div class="row">
-                            <form method="GET" action="{{ route('diarios.index') }}">
-                                @csrf
-                                <div class="row mb-3 align-items-center">
-                                    <div class="col-auto">
-                                        <input type="date" id="fecha" name="fecha" class="form-control">
+                        <div class="row  mt-n1 align-items-center">
+                            <div class="col-xl-6">
+                                <form method="GET" action="{{ route('diarios.index') }}">
+                                    @csrf
+                                    <div class="row  mt-n1 align-items-center">
+                                        <div class="col-auto">
+                                            <input type="date" id="fecha" name="fecha" class="form-control">
+                                        </div>
+                                        <div class="col-auto">
+                                            <button type="submit" class="btn btn-primary">
+                                                <i class="fas fa-search"></i>
+                                                Buscar
+                                            </button>
+                                        </div>
                                     </div>
-                                    <div class="col-auto">
-                                        <button type="submit" class="btn btn-primary">
-                                            <i class="fas fa-search"></i>
-                                            Buscar
-                                        </button>
+                                </form>
+                            </div>
+                            <div class="col-xl-6">
+                                <form action="{{ route('diarios.index') }}" method="GET" id="ordenarForm">
+                                    <div class="row mt-n1 align-items-center">
+                                        <div class="col-auto">
+                                            <select class="form-select mt-1" name="orden" id="ordenSelect">
+                                                <option value="asc" {{ request('orden') == 'asc' ? 'selected' : '' }}>
+                                                    Ascendente
+                                                </option>
+                                                <option value="desc" {{ request('orden') == 'desc' ? 'selected' : '' }}>
+                                                    Descendente
+                                                </option>
+                                            </select>
+                                        </div>
+                                        <div class="col-auto">
+                                            <button class="btn btn-warning mt-1" type="submit" id="ordenarButtonFecha">
+                                                <i class="fas fa-sort-alpha-down fa-lg"></i>
+                                                Ordenar
+                                            </button>
+                                            <br>
+                                        </div>
                                     </div>
-                                </div>
-                            </form>
+                                </form>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -48,7 +73,7 @@
             <div class="card shadow h-100 d-flex">
                 <div class="card-body bg-dark shadow-xl">
                     <div class="card-title">
-                        <p>Botones de Interaccion</p>
+                        <p style="font-weight: bold;">Botones de Interaccion</p>
                         <hr>
                     </div>
                     <div class="card-text">
@@ -76,6 +101,7 @@
     </div>
 </section>
 
+<!-- saldo editable del dia  -->
 <!-- saldo inicial del dia -->
 <section class="container-fluid">
     <div class="row">
@@ -84,13 +110,55 @@
                 <table class="table table-striped table-hover table-bordered mt-2">
                     <thead class="table-dark">
                         <th style="text-align:right;">Saldo Inicial del dia:</th>
-                        <td>{{ $saldoDiaAnterior  }}</td>
+                        <td>{{ $saldoDiaAnterior }}</td>
                     </thead>
+                    <tbody>
+                        <td></td>
+                        <td>
+                            @can('editar-saldo-inicial')
+                            <!-- vemos si el dia es igual al de ayer -->
+                            @if (!$registroAyer || $registroAyer->Saldo == 0 || $saldoAyer == 0 || ($registroAyer && $registroAyer->created_at->diffInHours(now()) < 2)) <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalAgregarSaldo">
+                                <i class="fas fa-plus"></i>
+                                Añadir
+                                </button>
+                                @endif
+                                <!-- @if ($saldoAyer == 0)
+                           
+                            @endif -->
+                                @endcan
+                        </td>
+                    </tbody>
                 </table>
             </div>
         </div>
     </div>
 </section>
+<!-- modal para editar el saldo inicial del dia traido desde el controlador de index-->
+<section>
+    <div class="modal fade" id="modalAgregarSaldo" tabindex="-1" role="dialog" aria-labelledby="modalAgregarSaldoLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalAgregarSaldoLabel">Agregar Saldo Inicial del dia</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <!-- Formulario para ingresar el saldo manualmente que va al controlador de Igresosegresos en un metodo con el nombre agregarSaldoDiaAnterior-->
+                    <form action="{{ route('agregar-saldo-inicial') }}" method="POST">
+                        @csrf
+                        @method('GET')
+                        <label class="form-label" for="saldo_manual">Ingrese el saldo manualmente:</label>
+                        <input class="form-control mb-3" type="text" id="saldo_manual" name="saldo_manual">
+                        <button type="submit" class="btn btn-primary">Guardar saldo</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
 <!-- saldo final del dia -->
 <section class="container-fluid">
     <div class="row">
@@ -273,14 +341,12 @@
                         <td>TOTAL</td>
                         <td>{{ $sumaRecorte }}</td>
                         <td>
-
                             @can('editar-corte')
                             <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
                                 <i class="fas fa-plus"></i>
                                 Añadir
                             </button>
                             @endcan
-
                         </td>
                     </tr>
                 </tbody>
@@ -467,4 +533,6 @@
 <script>
     console.log('Hola');
 </script>
+<!-- para la filtracion y ordenamiento -->
+<script src="{{ asset('js/FiltracionesOrdenamientos.js') }}"></script>
 @stop

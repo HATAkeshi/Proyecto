@@ -28,6 +28,16 @@ class DiariosController extends Controller
      */
     public function index(Request $request)
     {
+        //ordenamiento por desendente y acendenete
+        $orden = $request->input('orden', 'asc');
+        
+        //Obtenemos la fecha de ayer 
+        $fechaAyer = Carbon::now()->subDay()->toDateString();
+
+        //vemos si el saldo de ayer del dia actual fue cero
+        $registroAyer = Ingresoegreso::whereDate('fecha', $fechaAyer)->first();
+        $saldoAyer = $registroAyer ? $registroAyer->Saldo : 0;
+
         //mostramos los datos de la tabla diarios solo los ultimos registros ingresados del dia actual
         $diarios = Diario::orderBy('created_at', 'desc')->take(1)->get();
 
@@ -35,7 +45,7 @@ class DiariosController extends Controller
         $fechaIngresada = $request->input('fecha');
         $fechaActual = $fechaIngresada ? Carbon::parse($fechaIngresada)->toDateString() : Carbon::today()->toDateString();
 
-        // Obtener los ingresos de cursos y alquileres del día actual
+        // Obtener los ingresos de cursos y alquileres del día actual(sumas)
         $sumaCursosActual = Curso::whereDate('created_at', $fechaActual)->sum('Ingresos');
         $sumaAlquileresActual = Alquilere::whereDate('created_at', $fechaActual)->sum('Ingresos');
         $sumaDepositosActual = Deposito::whereDate('created_at', $fechaActual)->sum('Monto');
@@ -70,12 +80,12 @@ class DiariosController extends Controller
         $sumaDepGasRecActual = $sumaDepositosActual + $sumaGastosActual + $sumaRecorte;
 
         //para mostrar las tablas que se crearon en el dia 
-        $alquileres = Alquilere::whereDate('created_at', $fechaActual)->latest()->get();
-        $cursos = Curso::whereDate('created_at', $fechaActual)->latest()->get();
-        $depositos = Deposito::whereDate('created_at', $fechaActual)->latest()->get();
-        $gastos = Gasto::whereDate('created_at', $fechaActual)->latest()->get();
+        $alquileres = Alquilere::whereDate('created_at', $fechaActual)->orderBy('created_at', $orden)->get();
+        $cursos = Curso::whereDate('created_at', $fechaActual)->orderBy('created_at', $orden)->get();
+        $depositos = Deposito::whereDate('created_at', $fechaActual)->orderBy('created_at', $orden)->get();
+        $gastos = Gasto::whereDate('created_at', $fechaActual)->orderBy('created_at', $orden)->get();
 
-        return view('diarios.index', compact('diarios', 'saldoDiaAnterior', 'sumaCursosAlquileresAnteriorActual', 'fechaActual', 'sumaAlquileresActual',  'sumaCursosActual', 'sumaDepositosActual', 'sumaGastosActual', 'sumaDepGasRecActual', 'sumaRecorte'))->with([
+        return view('diarios.index', compact('diarios', 'saldoDiaAnterior', 'sumaCursosAlquileresAnteriorActual', 'fechaActual', 'fechaAyer', 'sumaAlquileresActual',  'sumaCursosActual', 'sumaDepositosActual', 'sumaGastosActual', 'sumaDepGasRecActual', 'sumaRecorte', 'saldoAyer', 'registroAyer', 'fechaIngresada'))->with([
             'ultimoRegistro' => $ultimoRegistro,
             //demas variables
             'alquileres' => $alquileres,
@@ -99,7 +109,7 @@ class DiariosController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            'monedas' => 'numeric',
+            'monedas' => 'numeric|regex:/^\d+(\.\d{1,2})?$/',
             'billetes' => 'numeric',
         ]);
 
@@ -126,6 +136,7 @@ class DiariosController extends Controller
     public function edit(string $id)
     {
         //
+
     }
 
     /**
@@ -133,7 +144,8 @@ class DiariosController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        //modificar el saldo inicial del dia 
+
     }
 
     /**

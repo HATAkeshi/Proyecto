@@ -54,6 +54,11 @@ class SeederTablePermisos extends Seeder
             'editar-corte',
             //tabla de Ingresos Egresos
             'ver-Ingresos-Egresos',
+            //modificar el saldo inicial del dia
+            'editar-saldo-inicial',
+            //vista de todas las tablas de eliminado 
+            'ver-eliminados',
+            'restaurar-eliminados',
         ];
         foreach($permisos as $permiso){
             Permission::create(['name'=>$permiso]);

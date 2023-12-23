@@ -34,10 +34,35 @@
                                 @endcan -->
                             </div>
                             <div class="col-auto">
-                                <button type="button" class="btn btn-danger">
+                                <button type="button" class="btn btn-danger mt-1">
                                     <i class="fas fa-print"></i>
                                     Imprimir
                                 </button>
+                            </div>
+                            <div class="col-auto">
+                                <form action="{{ route('depositos.index') }}" method="GET" id="ordenarForm">
+                                    <div class="row mb-3 align-items-center">
+                                        <div class="col-auto">
+                                            <select class="form-select mt-1" name="orden" id="ordenSelect">
+                                                <option value="desc" {{ request('orden') == 'desc' ? 'selected' : '' }}>Descendente</option>
+                                                <option value="asc" {{ request('orden') == 'asc' ? 'selected' : '' }}>Ascendente</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-auto">
+                                            <button class="btn btn-success mt-1" type="submit" id="ordenarButtonFechaRango">
+                                                <i class="fas fa-sort-alpha-down fa-lg"></i>
+                                                Ordenar
+                                            </button>
+                                            <br>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="col-auto">
+                                <a href="{{ route('eliminados-deposito') }}" type="button" class="btn btn-danger m-1">
+                                    <i class="fas fa-eye"></i>
+                                    Ver eliminados
+                                </a>
                             </div>
                         </div>
                     </div>
@@ -83,7 +108,7 @@
 <!-- tabla de depositos -->
 <section class="container-fluid">
     <div class="row">
-        <div class="col-md-12">
+        <div class="col-xl-12">
             <table class="table table-striped table-hover table-bordered mt-2">
                 <thead class="table-dark">
                     <th style="display: none">ID</th>
@@ -145,6 +170,7 @@
 
 @section('js')
 <script src="{{ asset('js/bootstrap.bundle.min.js') }}"></script>
+<script src="{{ asset('js/FiltracionesOrdenamientoRangos.js') }}"></script>
 <script>
     console.log('Hola');
 </script>

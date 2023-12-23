@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('diarios', function (Blueprint $table) {
             $table->id();
-            $table->integer('monedas')->nullable()->default('0');
+            $table->decimal('monedas', 10, 2)->nullable()->default('0.00');
             $table->integer('billetes')->nullable()->default('0');
             $table->timestamps();
         });

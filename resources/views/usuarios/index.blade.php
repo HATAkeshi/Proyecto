@@ -65,20 +65,23 @@
                             @endif
                         </td>
                         <td>
-                            @can('crear-usuarios')
-                            <a class="btn btn-primary" href="{{ route('usuarios.edit', $usuario->id) }}">
-                                <i class="fas fa-pen"></i>
-                                Editar
-                            </a>
-                            @endcan
-                            @can('borar-usuarios')
-                            {!! Form::open(['method'=> 'DELETE', 'route'=> ['usuarios.destroy', $usuario->id], 'style'=>'display:inline']) !!}
-                            <button type="submit" class="btn btn-danger">
-                                <i class="fas fa-trash"></i>
-                                Borrar
-                            </button>
-                            {!! Form::close() !!}
-                            @endcan
+                            <form id="deleteForm" action="{{ route('usuarios.destroy', $usuario->id) }}" method="post">
+                                @can('crear-usuarios')
+                                <a class="btn btn-primary" href="{{ route('usuarios.edit', $usuario->id) }}">
+                                    <i class="fas fa-pen"></i>
+                                    Editar
+                                </a>
+                                @endcan
+
+                                @csrf
+                                @method('DELETE')
+                                @can('borrar-usuarios')
+                                <button type="submit" class="btn btn-danger" onclick="confirmarEliminacion('deleteForm')">
+                                    <i class="fas fa-trash"></i>
+                                    Borrar
+                                </button>
+                                @endcan
+                            </form>
                         </td>
                     </tr>
                     @endforeach
@@ -99,6 +102,8 @@
 
 @section('js')
 <script src="{{ asset('js/bootstrap.bundle.min.js') }}"></script>
+<script src="{{ asset('js/sweetalert2.all.min.js') }}"></script>
+<script src="{{ asset('js/confirmarEliminacion.js') }}"></script>
 <script>
     console.log('Hola');
 </script>

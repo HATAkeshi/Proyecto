@@ -14,6 +14,9 @@ use App\Http\Controllers\GastosController;
 //reportes
 use App\Http\Controllers\DiariosController;
 use App\Http\Controllers\IngresoegresoController;
+use App\Models\Alquilere;
+use App\Models\Deposito;
+use App\Models\Gasto;
 
 /*
 |--------------------------------------------------------------------------
@@ -46,12 +49,33 @@ Route::group(['middleware' => ['auth']], function(){
     Route::resource('roles', RolController::class);
     Route::resource('usuarios', UsuarioController::class);
     //comienza los formularios
+    //Cursos
     Route::resource('cursos', CursosController::class);
+    //eliminados de cursos y restaurado
+    Route::get('/eliminados-cursos', [CursosController::class, 'eliminadosCursos'])->name('eliminados-cursos');
+    Route::put('/cursos/{id}/restore', [CursosController::class, 'restore'])->name('cursos.restore');
+    //Constuctora
     Route::resource('constructoras', ConstructorasController::class);
+    //eliminados de Constructora y restaurado
+    Route::get('/eliminados-constructora', [ConstructorasController::class, 'eliminadosConstructora'])->name('eliminados-constructora');
+    Route::put('/constructoras/{id}/restore', [ConstructorasController::class, 'restore'])->name('constructoras.restore');
+    //Alquileres
     Route::resource('alquileres', AlquilereController::class);
+    //eliminados de Constructora y restaurado
+    Route::get('/eliminados-alquilere', [AlquilereController::class, 'eliminadosAlquilere'])->name('eliminados-alquilere');
+    Route::put('/alquileres/{id}/restore', [AlquilereController::class, 'restore'])->name('alquileres.restore');
+    //Depositos
     Route::resource('depositos', DepositosController::class);
+    //eliminados de Constructora y restaurado aun no
+    Route::get('/eliminados-deposito', [DepositosController::class, 'eliminadosDeposito'])->name('eliminados-deposito');
+    //Gastos
     Route::resource('gastos', GastosController::class);
+    //eliminados de Constructora y restaurado
+    Route::get('/eliminados-gasto', [GastosController::class, 'eliminadosGasto'])->name('eliminados-gasto');
+    Route::put('/gastos/{id}/restore', [GastosController::class, 'restore'])->name('gastos.restore');
     //Reportes
     Route::resource('diarios', DiariosController::class);
     Route::resource('ingresoegresos', IngresoegresoController::class);
+    //modificar el saldo del dia anterior si es cero o no hubo registros
+    Route::get('agregar-saldo-inicial', [IngresoegresoController::class,'agregarSaldoDiaAnterior'])->name('agregar-saldo-inicial');
 });

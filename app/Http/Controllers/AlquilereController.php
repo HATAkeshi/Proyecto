@@ -18,26 +18,57 @@ class AlquilereController extends Controller
         $this->middleware('permission:editar-alquiler', ['only' => ['edit', 'update']]);
         //borrar
         $this->middleware('permission:borrar-alquiler', ['only' => ['destroy']]);
+        //ver eliminados
+        $this->middleware('permission:ver-eliminados')->only('eliminadosCursos');
+        //restaurar eliminados
+        $this->middleware('permission:restaurar-eliminados', ['only' => ['restore']]);
+    }
+    //controlador para ver los cursos eliminados
+    public function eliminadosAlquilere()
+    {
+        $registrosEliminados = Alquilere::onlyTrashed()->get();
+        return view('alquileres.eliminado', compact('registrosEliminados'));
+    }
+    //metodo para restaurar los cursos eliminados
+    public function restore($id)
+    {
+        // Encuentra el curso eliminado por su ID
+        $alquilere = Alquilere::withTrashed()->findOrFail($id);
+
+        // Restaura el curso
+        $alquilere->restore();
+
+        // Redirecciona a la vista de registros eliminados
+        return redirect()->route('eliminados-alquilere')->with('success', 'Alquiler restaurado exitosamente.');
     }
     /**
      * Display a listing of the resource.
      */
     public function index(Request $request)
     {
-         //filtrador por fechas
-         $fechaInicio = $request->input('fecha_inicio');
-         $fechaFin = $request->input('fecha_fin');
- 
-         // Validación de fechas y consulta
-         $query = Alquilere::query();
-         if ($fechaInicio && $fechaFin) {
-             $query->whereBetween('created_at', [$fechaInicio, $fechaFin]);
-         }
-         // Obtener los resultados filtrados por fecha y si no hay nada mostrar todos los cursos
-        $alquileres = $query->orderBy('created_at', 'desc')->paginate(5);
+        //filtrador por fechas
+        $fechaInicio = $request->input('fecha_inicio');
+        $fechaFin = $request->input('fecha_fin');
 
-         //suam de todas las tablas
-         $sumaAlquileres = $query->sum('Ingresos');
+        //ordenamiento por desendente y acendenete
+        $orden = $request->input('orden', 'desc');
+
+        // Validación de fechas y consulta
+        $query = Alquilere::query();
+
+        //filtramos las fechas en un rango donde se toma en cuenat el inicio y el fin 
+        if ($fechaInicio !== null && $fechaFin !== null) {
+            $query->where(function ($query) use ($fechaInicio, $fechaFin) {
+                $query->whereDate('created_at', '>=', $fechaInicio)
+                    ->whereDate('created_at', '<=', $fechaFin);
+            });
+        }
+
+        //suam de todas las tablas
+        $sumaAlquileres = $query->sum('Ingresos');
+
+        // Obtener los resultados filtrados por fecha y si no hay nada mostrar todos los cursos
+        $alquileres = $query->orderBy('created_at', $orden)->paginate(5);
 
         return view('alquileres.index', compact('alquileres', 'sumaAlquileres'));
     }
@@ -100,7 +131,7 @@ class AlquilereController extends Controller
             'Ingresos' => 'required|numeric|regex:/^\d+(\.\d{1,2})?$/'
         ]);
         $alquilere->update($request->all());
-        return redirect()->route('alquileres.index')->with('Actualizado con exito c:');;
+        return redirect()->route('alquileres.index')->with('Actualizado con exito c:');
     }
 
     /**

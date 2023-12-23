@@ -20,10 +20,14 @@ class Gasto extends Model
     {
         parent::boot();
 
-        static::creating(function ($gasto) {
-            $lastId = static::max('id') ?? 0; // Obtener el último ID en la tabla (o cero si no hay registros)
-            $newId = $lastId + 1; // Incrementar el ID
-            $gasto->Nro_de_comprobante = 'G-' . str_pad($newId, 5, '0', STR_PAD_LEFT);
+        static::created(function ($gasto) {
+            $gasto->Nro_de_comprobante = 'G-' . str_pad($gasto->id, 5, '0', STR_PAD_LEFT);
+            $gasto->save();
+        });
+        static::saving(function ($gasto) {
+            if (!$gasto->Nro_de_comprobante) {
+                $gasto->Nro_de_comprobante = 'AA-' . str_pad($gasto->id, 5, '0', STR_PAD_LEFT);
+            }
         });
     }
 }

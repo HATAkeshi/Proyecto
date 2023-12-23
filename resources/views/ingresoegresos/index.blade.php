@@ -26,10 +26,33 @@
                     <div class="card-text">
                         <div class="row">
                             <div class="col-auto">
-                                <button type="button" class="btn btn-danger">
+                                <button type="button" class="btn btn-danger mb-2">
                                     <i class="fas fa-print"></i>
                                     Imprimir
                                 </button>
+                            </div>
+                            <div class="col-auto">
+                                <form action="{{ route('ingresoegresos.index') }}" method="GET" id="ordenarForm">
+                                    <div class="row mt-n1 align-items-center">
+                                        <div class="col-auto">
+                                            <select class="form-select mt-1" name="orden" id="ordenSelect">
+                                                <option value="asc" {{ request('orden') == 'asc' ? 'selected' : '' }}>
+                                                    Ascendente
+                                                </option>
+                                                <option value="desc" {{ request('orden') == 'desc' ? 'selected' : '' }}>
+                                                    Descendente
+                                                </option>
+                                            </select>
+                                        </div>
+                                        <div class="col-auto">
+                                            <button class="btn btn-warning mt-1" type="submit" id="ordenarButtonFechaRango">
+                                                <i class="fas fa-sort-alpha-down fa-lg"></i>
+                                                Ordenar
+                                            </button>
+                                            <br>
+                                        </div>
+                                    </div>
+                                </form>
                             </div>
                         </div>
                     </div>
@@ -88,7 +111,7 @@
                 </thead>
                 <tbody>
                     @foreach($ingresoegresos as $ingresoegreso)
-                    <tr>
+                    <tr class="{{ $ingresoegreso->Detalle === 'Domingo - Feriado - Etc' ? 'table-warning' : '' }}">
                         <td style="display: none">{{$ingresoegreso->id}}</td>
                         <td>{{$ingresoegreso->fecha}}</td>
                         <td>{{$ingresoegreso->Detalle}}</td>
@@ -115,6 +138,11 @@
         </div>
     </div>
 </section>
+
+<!-- paginacion -->
+<div class="pagination justify-content-center">
+    {!! $ingresoegresos->links() !!}
+</div>
 @stop
 
 @section('css')
@@ -124,6 +152,8 @@
 
 @section('js')
 <script src="{{ asset('js/bootstrap.bundle.min.js') }}"></script>
+<!-- para la filtracion y ordenamiento -->
+<script src="{{ asset('js/FiltracionesOrdenamientoRangos.js') }}"></script>
 <script>
     console.log('Hola');
 </script>

@@ -14,11 +14,11 @@ return new class extends Migration
         Schema::create('ingresoegresos', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
-            $table->string('Detalle')->nullable()->default('Reporte');
+            $table->string('Detalle')->nullable()->default('Reporte Diario');
             $table->string('Nombre')->nullable()->default('-');
-            $table->integer('Ingreso');
-            $table->integer('Egreso');
-            $table->integer('Saldo');
+            $table->decimal('Ingreso', 10, 2)->default(0.00);
+            $table->decimal('Egreso', 10, 2)->default(0.00);
+            $table->decimal('Saldo', 10, 2)->default(0.00);
             $table->date('fecha');
         });
     }
