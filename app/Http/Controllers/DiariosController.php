@@ -14,6 +14,10 @@ use App\Models\Diario;
 use App\Models\Ingresoegreso;
 //fechas
 use Carbon\Carbon;
+//pdf
+use Barryvdh\DomPDF\Facade\Pdf;
+//user
+use Illuminate\Support\Facades\Auth;
 
 class DiariosController extends Controller
 {
@@ -30,7 +34,7 @@ class DiariosController extends Controller
     {
         //ordenamiento por desendente y acendenete
         $orden = $request->input('orden', 'asc');
-        
+
         //Obtenemos la fecha de ayer 
         $fechaAyer = Carbon::now()->subDay()->toDateString();
 
@@ -84,6 +88,61 @@ class DiariosController extends Controller
         $cursos = Curso::whereDate('created_at', $fechaActual)->orderBy('created_at', $orden)->get();
         $depositos = Deposito::whereDate('created_at', $fechaActual)->orderBy('created_at', $orden)->get();
         $gastos = Gasto::whereDate('created_at', $fechaActual)->orderBy('created_at', $orden)->get();
+
+        //pdf
+        //fecha convertida 
+        $fechaActualFormateada = Carbon::parse($fechaActual)->isoFormat('D [de] MMMM [del] YYYY');
+
+        // Obtener la fecha actual
+        $fecha_actual = Carbon::now()->toDateString(); // Formato 'año-mes-día'
+
+        // Obtener la hora actual
+        $hora_actual = Carbon::now()->toTimeString(); // Formato 'hora:minuto:segundo'
+
+        // Obtener el usuario autenticado
+        $usuarioAutenticado = Auth::user();
+
+        // Acceder al nombre y rol del usuario autenticado
+        $nombreUsuario = $usuarioAutenticado->name;
+        $rolUsuario = $usuarioAutenticado->roles->first()->name;
+
+        // Si se solicita generar un PDF, entonces se generará y se enviará
+        if ($request->has('generar_pdf')) {
+            //pasamos datos
+            $data = [
+                'alquileres' => $alquileres,
+                'cursos' => $cursos,
+                'depositos' => $depositos,
+                'gastos' => $gastos,
+                'diarios' => $diarios,
+                'saldoDiaAnterior' => $saldoDiaAnterior,
+                'sumaCursosAlquileresAnteriorActual' => $sumaCursosAlquileresAnteriorActual,
+                'fechaActual' => $fechaActual,
+                'fechaAyer' => $fechaAyer,
+                'sumaAlquileresActual' => $sumaAlquileresActual,
+                'sumaCursosActual' => $sumaCursosActual,
+                'sumaDepositosActual' => $sumaDepositosActual,
+                'sumaGastosActual' => $sumaGastosActual,
+                'sumaDepGasRecActual' => $sumaDepGasRecActual,
+                'sumaRecorte' => $sumaRecorte,
+                'saldoAyer' => $saldoAyer,
+                'registroAyer' => $registroAyer,
+                'fechaIngresada' => $fechaIngresada,
+                'ultimoRegistro' => $ultimoRegistro,
+                'fechaActualFormateada' => $fechaActualFormateada,
+
+                'fecha_actual' => $fecha_actual,
+                'hora_actual' => $hora_actual,
+                'nombreUsuario' => $nombreUsuario,
+                'rolUsuario' => $rolUsuario,
+            ];
+
+            // Generar el PDF con dompdf
+            $pdf = Pdf::loadView('diarios.pdf', $data);
+
+            // Mostrar el PDF en el navegador
+            return $pdf->stream('Reporte-Diario-de-caja.pdf');
+        }
 
         return view('diarios.index', compact('diarios', 'saldoDiaAnterior', 'sumaCursosAlquileresAnteriorActual', 'fechaActual', 'fechaAyer', 'sumaAlquileresActual',  'sumaCursosActual', 'sumaDepositosActual', 'sumaGastosActual', 'sumaDepGasRecActual', 'sumaRecorte', 'saldoAyer', 'registroAyer', 'fechaIngresada'))->with([
             'ultimoRegistro' => $ultimoRegistro,

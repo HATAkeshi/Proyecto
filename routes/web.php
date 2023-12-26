@@ -54,6 +54,8 @@ Route::group(['middleware' => ['auth']], function(){
     //eliminados de cursos y restaurado
     Route::get('/eliminados-cursos', [CursosController::class, 'eliminadosCursos'])->name('eliminados-cursos');
     Route::put('/cursos/{id}/restore', [CursosController::class, 'restore'])->name('cursos.restore');
+    //pdf personalizado
+    Route::get('/cursos/{id}/pdfPersonal', [CursosController::class, 'pdfPersonal'])->name('cursos.pdfPersonal');
     //Constuctora
     Route::resource('constructoras', ConstructorasController::class);
     //eliminados de Constructora y restaurado
@@ -73,6 +75,8 @@ Route::group(['middleware' => ['auth']], function(){
     //eliminados de Constructora y restaurado
     Route::get('/eliminados-gasto', [GastosController::class, 'eliminadosGasto'])->name('eliminados-gasto');
     Route::put('/gastos/{id}/restore', [GastosController::class, 'restore'])->name('gastos.restore');
+    //pdf personalizado
+    Route::get('/gastos/{id}/pdfPersonal', [GastosController::class, 'pdfPersonal'])->name('gastos.pdfPersonal');
     //Reportes
     Route::resource('diarios', DiariosController::class);
     Route::resource('ingresoegresos', IngresoegresoController::class);

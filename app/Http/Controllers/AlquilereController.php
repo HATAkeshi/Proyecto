@@ -5,6 +5,12 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 //referenciamos el modelo 
 use App\Models\Alquilere;
+//fechas
+use Carbon\Carbon;
+//pdf
+use Barryvdh\DomPDF\Facade\Pdf;
+//user
+use Illuminate\Support\Facades\Auth;
 
 class AlquilereController extends Controller
 {
@@ -68,7 +74,57 @@ class AlquilereController extends Controller
         $sumaAlquileres = $query->sum('Ingresos');
 
         // Obtener los resultados filtrados por fecha y si no hay nada mostrar todos los cursos
-        $alquileres = $query->orderBy('created_at', $orden)->paginate(5);
+        $alquileres = $query->orderBy('created_at', $orden)->paginate(10);
+
+        //pdf
+        //fechas convertidas
+        if (!$fechaInicio && !$fechaFin) {
+            $fechaMinima = Alquilere::min('created_at'); 
+            $fechaMaxima = Alquilere::max('created_at'); 
+
+            $fechaFormateadaInicio = Carbon::parse($fechaMinima)->isoFormat('D [de] MMMM [del] YYYY');
+            $fechaFormateadaFin = Carbon::parse($fechaMaxima)->isoFormat('D [de] MMMM [del] YYYY');
+        } else {
+            // Convertir fechas proporcionadas al formato unix
+            $fechaInicioFormato = $fechaInicio ? Carbon::parse($fechaInicio)->toDateString() : Carbon::today()->toDateString();
+            $fechaFinFormato = $fechaFin ? Carbon::parse($fechaFin)->toDateString() : Carbon::today()->toDateString();
+
+            $fechaFormateadaInicio = Carbon::parse($fechaInicioFormato)->isoFormat('D [de] MMMM [del] YYYY');
+            $fechaFormateadaFin = Carbon::parse($fechaFinFormato)->isoFormat('D [de] MMMM [del] YYYY');
+        }
+        // Obtener la fecha actual
+        $fecha_actual = Carbon::now()->toDateString(); // Formato 'año-mes-día'
+
+        // Obtener la hora actual
+        $hora_actual = Carbon::now()->toTimeString(); // Formato 'hora:minuto:segundo'
+
+        //usuario autenticado
+        $usuarioAutenticado = Auth::user();
+
+        // Acceder al nombre y rol del usuario autenticado
+        $nombreUsuario = $usuarioAutenticado->name;
+        $rolUsuario = $usuarioAutenticado->roles->first()->name;
+
+        // Si se solicita generar un PDF, entonces se generará y se enviará
+        if ($request->has('generar_pdf')) {
+            //pasamos datos
+            $data = [
+                'alquileres' => $alquileres,
+                'sumaAlquileres' => $sumaAlquileres ,
+                'fecha_actual' => $fecha_actual,
+                'hora_actual' => $hora_actual,
+                'nombreUsuario' => $nombreUsuario,
+                'rolUsuario' => $rolUsuario,
+                'fechaFormateadaInicio' => $fechaFormateadaInicio,
+                'fechaFormateadaFin' => $fechaFormateadaFin,
+            ];
+
+            // Generar el PDF con dompdf
+            $pdf = Pdf::loadView('alquileres.pdf', $data);
+
+            // Mostrar el PDF en el navegador
+            return $pdf->stream('Alquileres.pdf');
+        }
 
         return view('alquileres.index', compact('alquileres', 'sumaAlquileres'));
     }

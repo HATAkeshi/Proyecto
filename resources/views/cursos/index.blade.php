@@ -34,10 +34,23 @@
                                 @endcan
                             </div>
                             <div class="col-auto">
-                                <button type="button" class="btn btn-danger m-1">
+                                @php
+                                $url = request()->fullUrl(); // Obtener la URL completa actual
+                                $params = parse_url($url); // Parsear la URL para obtener sus componentes
+
+                                // Extraer y convertir los parámetros de la URL en un array asociativo
+                                parse_str($params['query'] ?? '', $query);
+
+                                // Agregar el parámetro generar_pdf
+                                $query['generar_pdf'] = true;
+
+                                // Obtener la ruta base y agregar los parámetros como query string
+                                $route = route('cursos.index') . '?' . http_build_query($query);
+                                @endphp
+                                <a href="{{ $route }}" type="button" class="btn btn-danger m-1" target="_blank">
                                     <i class="fas fa-print"></i>
                                     Imprimir
-                                </button>
+                                </a>
                             </div>
                             <div class="col-auto">
                                 <form action="{{ route('cursos.index') }}" method="GET" id="ordenarForm">
@@ -151,6 +164,10 @@
                                     Borrar
                                 </button>
                                 @endcan
+                                <a href="{{ route('cursos.pdfPersonal', ['id' => $curso->id]) }}" type="button" class="btn btn-warning mt-1" target="_blank">
+                                    <i class="fas fa-print"></i>
+                                    Imprimir
+                                </a>
                             </form>
                         </td>
                     </tr>

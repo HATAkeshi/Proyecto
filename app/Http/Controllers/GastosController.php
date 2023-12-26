@@ -5,6 +5,12 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 //referenciamos lo modelos
 use App\Models\Gasto;
+//fechas
+use Carbon\Carbon;
+//pdf
+use Barryvdh\DomPDF\Facade\Pdf;
+//user
+use Illuminate\Support\Facades\Auth;
 
 class GastosController extends Controller
 {
@@ -63,13 +69,84 @@ class GastosController extends Controller
             });
         }
 
-        // Obtener los resultados filtrados por fecha y si no hay nada mostrar todos los gastos
-        $gastos = $query->orderBy('created_at', $orden)->paginate(5);
-
         //suma de todos los gastos
         $sumaGastos = $query->sum('Monto');
 
+        // Obtener los resultados filtrados por fecha y si no hay nada mostrar todos los gastos
+        $gastos = $query->orderBy('created_at', $orden)->paginate(10);
+
+        //pdf
+        //fechas convertidas
+        if (!$fechaInicio && !$fechaFin) {
+            $fechaMinima = Gasto::min('created_at');
+            $fechaMaxima = Gasto::max('created_at');
+
+            $fechaFormateadaInicio = Carbon::parse($fechaMinima)->isoFormat('D [de] MMMM [del] YYYY');
+            $fechaFormateadaFin = Carbon::parse($fechaMaxima)->isoFormat('D [de] MMMM [del] YYYY');
+        } else {
+            // Convertir fechas proporcionadas al formato unix
+            $fechaInicioFormato = $fechaInicio ? Carbon::parse($fechaInicio)->toDateString() : Carbon::today()->toDateString();
+            $fechaFinFormato = $fechaFin ? Carbon::parse($fechaFin)->toDateString() : Carbon::today()->toDateString();
+
+            $fechaFormateadaInicio = Carbon::parse($fechaInicioFormato)->isoFormat('D [de] MMMM [del] YYYY');
+            $fechaFormateadaFin = Carbon::parse($fechaFinFormato)->isoFormat('D [de] MMMM [del] YYYY');
+        }
+
+        // Obtener la fecha actual
+        $fecha_actual = Carbon::now()->toDateString(); // Formato 'año-mes-día'
+
+        // Obtener la hora actual
+        $hora_actual = Carbon::now()->toTimeString(); // Formato 'hora:minuto:segundo'
+
+        // Obtener el usuario autenticado
+        $usuarioAutenticado = Auth::user();
+
+        // Acceder al nombre y rol del usuario autenticado
+        $nombreUsuario = $usuarioAutenticado->name;
+        $rolUsuario = $usuarioAutenticado->roles->first()->name;
+
+        // Si se solicita generar un PDF, entonces se generará y se enviará
+        if ($request->has('generar_pdf')) {
+            //pasamos datos
+            $data = [
+                'gastos' => $gastos,
+                'sumaGastos' => $sumaGastos,
+                'fecha_actual' => $fecha_actual,
+                'hora_actual' => $hora_actual,
+                'nombreUsuario' => $nombreUsuario,
+                'rolUsuario' => $rolUsuario,
+                'fechaFormateadaInicio' => $fechaFormateadaInicio,
+                'fechaFormateadaFin' => $fechaFormateadaFin,
+            ];
+
+            // Generar el PDF con dompdf
+            $pdf = Pdf::loadView('gastos.pdf', $data);
+
+            // Mostrar el PDF en el navegador
+            return $pdf->stream('Gastos.pdf');
+        }
+
         return view('gastos.index', compact('gastos', 'sumaGastos'));
+    }
+
+    //pdf personalizado
+    public function pdfPersonal($id)
+    {
+        $gasto = Gasto::findOrFail($id);
+
+        $path_to_image = 'imagenesApoyo/logo-ludeno.svg';
+        $type = pathinfo($path_to_image, PATHINFO_EXTENSION);
+        $data = file_get_contents($path_to_image);
+        $base64 = 'data:image/' . $type . ';base64,' . base64_encode($data);
+
+        $data = [
+            'gasto' => $gasto,
+            'base64Image' => $base64,
+        ];
+
+        $pdf = PDF::loadView('gastos.pdfPersonal', $data);
+
+        return $pdf->stream('Recibo-gastos' . $id . '.pdf');
     }
 
     /**
