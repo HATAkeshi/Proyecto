@@ -16,7 +16,7 @@ class UsuarioController extends Controller
 {
     function __construct()
     {
-        $this->middleware('permission:ver-usuario')->only('index');
+        $this->middleware('permission:ver-usuarios')->only('index');
     }
     /**
      * Display a listing of the resource.

@@ -25,7 +25,7 @@ class AlquilereController extends Controller
         //borrar
         $this->middleware('permission:borrar-alquiler', ['only' => ['destroy']]);
         //ver eliminados
-        $this->middleware('permission:ver-eliminados')->only('eliminadosCursos');
+        $this->middleware('permission:ver-eliminados')->only('eliminadosAlquilere');
         //restaurar eliminados
         $this->middleware('permission:restaurar-eliminados', ['only' => ['restore']]);
     }
@@ -101,9 +101,20 @@ class AlquilereController extends Controller
         //usuario autenticado
         $usuarioAutenticado = Auth::user();
 
-        // Acceder al nombre y rol del usuario autenticado
-        $nombreUsuario = $usuarioAutenticado->name;
-        $rolUsuario = $usuarioAutenticado->roles->first()->name;
+        if ($usuarioAutenticado) {
+            // Acceder al nombre del usuario autenticado
+            $nombreUsuario = $usuarioAutenticado->name;
+        
+            // Verificar si el usuario tiene roles asignados antes de acceder al primer rol
+            if ($usuarioAutenticado->roles->isNotEmpty()) {
+                $rolUsuario = $usuarioAutenticado->roles->first()->name;
+            } else {
+                $rolUsuario = 'Sin roles asignados';
+            }
+        } else {
+            $nombreUsuario = '';
+            $rolUsuario = '';
+        }
 
         // Si se solicita generar un PDF, entonces se generará y se enviará
         if ($request->has('generar_pdf')) {

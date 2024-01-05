@@ -78,7 +78,7 @@ class DiariosController extends Controller
 
         //suma total de la tala cursos y alquileres y ademas es
         //saldo final del dia
-        $sumaCursosAlquileresAnteriorActual = $sumaCursosActual + $sumaAlquileresActual + $saldoDiaAnterior;
+        $sumaCursosAlquileresAnteriorActual = $saldoDiaAnterior + $sumaAlquileresActual + $sumaCursosActual - $sumaGastosActual ;
 
         //total de las tablas recorte depositos gastos
         $sumaDepGasRecActual = $sumaDepositosActual + $sumaGastosActual + $sumaRecorte;
@@ -102,9 +102,20 @@ class DiariosController extends Controller
         // Obtener el usuario autenticado
         $usuarioAutenticado = Auth::user();
 
-        // Acceder al nombre y rol del usuario autenticado
-        $nombreUsuario = $usuarioAutenticado->name;
-        $rolUsuario = $usuarioAutenticado->roles->first()->name;
+        if ($usuarioAutenticado) {
+            // Acceder al nombre del usuario autenticado
+            $nombreUsuario = $usuarioAutenticado->name;
+        
+            // Verificar si el usuario tiene roles asignados antes de acceder al primer rol
+            if ($usuarioAutenticado->roles->isNotEmpty()) {
+                $rolUsuario = $usuarioAutenticado->roles->first()->name;
+            } else {
+                $rolUsuario = 'Sin roles asignados';
+            }
+        } else {
+            $nombreUsuario = '';
+            $rolUsuario = '';
+        }
 
         // Si se solicita generar un PDF, entonces se generará y se enviará
         if ($request->has('generar_pdf')) {

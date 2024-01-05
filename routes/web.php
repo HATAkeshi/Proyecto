@@ -14,9 +14,8 @@ use App\Http\Controllers\GastosController;
 //reportes
 use App\Http\Controllers\DiariosController;
 use App\Http\Controllers\IngresoegresoController;
-use App\Models\Alquilere;
-use App\Models\Deposito;
-use App\Models\Gasto;
+//graficos
+use App\Http\Controllers\GraficasController;
 
 /*
 |--------------------------------------------------------------------------
@@ -38,14 +37,12 @@ Route::middleware([
     config('jetstream.auth_session'),
     'verified',
 ])->group(function () {
-    Route::get('/dashboard', function () {
-        return view('dashboard');
-    })->name('dashboard');
+    Route::get('/dashboard', [GraficasController::class, 'graficasIngresosEgresos'])->name('dashboard');
 });
 
 
 //new
-Route::group(['middleware' => ['auth']], function(){
+Route::group(['middleware' => ['auth']], function () {
     Route::resource('roles', RolController::class);
     Route::resource('usuarios', UsuarioController::class);
     //comienza los formularios
@@ -81,5 +78,5 @@ Route::group(['middleware' => ['auth']], function(){
     Route::resource('diarios', DiariosController::class);
     Route::resource('ingresoegresos', IngresoegresoController::class);
     //modificar el saldo del dia anterior si es cero o no hubo registros
-    Route::get('agregar-saldo-inicial', [IngresoegresoController::class,'agregarSaldoDiaAnterior'])->name('agregar-saldo-inicial');
+    Route::get('agregar-saldo-inicial', [IngresoegresoController::class, 'agregarSaldoDiaAnterior'])->name('agregar-saldo-inicial');
 });

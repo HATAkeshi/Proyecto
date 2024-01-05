@@ -29,10 +29,10 @@
                                     @csrf
                                     <div class="row  mt-n1 align-items-center">
                                         <div class="col-auto">
-                                            <input type="date" id="fecha" name="fecha" class="form-control">
+                                            <input type="date" id="fecha" name="fecha" class="form-control mt-1">
                                         </div>
                                         <div class="col-auto">
-                                            <button type="submit" class="btn btn-primary">
+                                            <button type="submit" class="btn btn-primary mt-1">
                                                 <i class="fas fa-search"></i>
                                                 Buscar
                                             </button>
@@ -40,7 +40,7 @@
                                     </div>
                                 </form>
                             </div>
-                            <div class="col-xl-6">
+                            <div class="col-xl-6 mt-1">
                                 <form action="{{ route('diarios.index') }}" method="GET" id="ordenarForm">
                                     <div class="row mt-n1 align-items-center">
                                         <div class="col-auto">
@@ -81,7 +81,7 @@
                             <div class="col-auto">
                                 <form action="{{ route('ingresoegresos.store') }}" method="POST">
                                     @csrf
-                                    <button type="submit" class="btn btn-success">
+                                    <button type="submit" class="btn btn-success mt-1">
                                         <i class="fas fa-save"></i>
                                         Actualizar o Guardar
                                     </button>
@@ -101,7 +101,7 @@
                                 // Obtener la ruta base y agregar los parámetros como query string
                                 $route = route('diarios.index') . '?' . http_build_query($query);
                                 @endphp
-                                <a href="{{ $route }}" type="button" class="btn btn-danger" target="_blank">
+                                <a href="{{ $route }}" type="button" class="btn btn-danger mt-1" target="_blank">
                                     <i class="fas fa-print"></i>
                                     Imprimir
                                 </a>
